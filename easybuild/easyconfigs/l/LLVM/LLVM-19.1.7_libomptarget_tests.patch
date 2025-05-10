@@ -15,9 +15,9 @@ index 4cd97a6a5ff6..7369cdd0163d 100644
 +set(OPENMP_TEST_OPENMP_FLAGS ${OPENMP_TEST_COMPILER_OPENMP_FLAGS} CACHE STRING
 +  "OpenMP compiler flag to use for testing OpenMP runtime libraries.")
 +
+ include(CheckCXXCompilerFlag)
  check_cxx_compiler_flag(-Werror=global-constructors OFFLOAD_HAVE_WERROR_CTOR)
 
- # LLVM source tree is required at build time for libomptarget
 diff --git a/offload/test/lit.cfg b/offload/test/lit.cfg
 index 99d7defdb9e1..40ed3f5928cf 100644
 --- a/offload/test/lit.cfg

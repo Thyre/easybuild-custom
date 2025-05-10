@@ -21,14 +21,14 @@ sources = [
 ]
 patches = [
     'LLVM-18.1.8_envintest.patch',
-    'LLVM-19.1.1_libomptarget_tests.patch',
+    'LLVM-19.1.7_libomptarget_tests.patch',
     'LLVM-19.1.1_envintest_lldb.patch',
     'LLVM-19.1.7_clang_rpathwrap_test.patch',
 ]
 checksums = [
     {'llvm-project-20.1.4.src.tar.xz': 'a95365b02536ed4aef29b325c205dd89c268cba41503ab2fc05f81418613ab63'},
     {'LLVM-18.1.8_envintest.patch': '376d1ef1016be17d721da6760bfd1abf20e44be9fc0b5c6fa20d3f0883987671'},
-    {'LLVM-19.1.1_libomptarget_tests.patch': 'd42b25adebc26a7085dad5c09a6501e60928fa66ebf66c98ce0cdee0dd8b776f'},
+    {'LLVM-19.1.7_libomptarget_tests.patch': 'a23503e31afbebe3a3d7219446c82188c782342282854708e6ae4e2e654fc61f'},
     {'LLVM-19.1.1_envintest_lldb.patch': 'e1d7e55834e75234b34e61aeff666223fdaf904f608dae8e8acc66b29e855db3'},
     {'LLVM-19.1.7_clang_rpathwrap_test.patch': '714bc4f80f38c3f670859ea033b93458937af11b2034607d0f9153cf8f65c35d'},
 ]
