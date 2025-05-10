@@ -1,0 +1,80 @@
+name = 'LLVM'
+version = '20.1.4'
+
+homepage = "https://llvm.org/"
+description = """The LLVM Core libraries provide a modern source- and target-independent
+ optimizer, along with code generation support for many popular CPUs
+ (as well as some less common ones!) These libraries are built around a well
+ specified code representation known as the LLVM intermediate representation
+ ("LLVM IR"). The LLVM Core libraries are well documented, and it is
+ particularly easy to invent your own language (or port an existing compiler)
+ to use LLVM as an optimizer and code generator."""
+
+toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
+toolchainopts = {
+    'pic': True,
+}
+
+source_urls = ['https://github.com/llvm/llvm-project/releases/download/llvmorg-%(version)s/']
+sources = [
+    'llvm-project-%(version)s.src.tar.xz',
+]
+patches = [
+    'LLVM-18.1.8_envintest.patch',
+    'LLVM-19.1.1_libomptarget_tests.patch',
+    'LLVM-19.1.1_envintest_lldb.patch',
+    'LLVM-19.1.7_clang_rpathwrap_test.patch',
+]
+checksums = [
+    {'llvm-project-20.1.4.src.tar.xz': 'a95365b02536ed4aef29b325c205dd89c268cba41503ab2fc05f81418613ab63'},
+    {'LLVM-18.1.8_envintest.patch': '376d1ef1016be17d721da6760bfd1abf20e44be9fc0b5c6fa20d3f0883987671'},
+    {'LLVM-19.1.1_libomptarget_tests.patch': 'd42b25adebc26a7085dad5c09a6501e60928fa66ebf66c98ce0cdee0dd8b776f'},
+    {'LLVM-19.1.1_envintest_lldb.patch': 'e1d7e55834e75234b34e61aeff666223fdaf904f608dae8e8acc66b29e855db3'},
+    {'LLVM-19.1.7_clang_rpathwrap_test.patch': '714bc4f80f38c3f670859ea033b93458937af11b2034607d0f9153cf8f65c35d'},
+]
+
+builddependencies = [
+    ('binutils', '2.42'),
+    ('Python', '3.13.1'),
+    ('SWIG', '4.3.1'),
+    ('CMake', '3.31.3'),
+    ('psutil', '7.0.0'),  # Needed to enable test timeout in lit
+    ('lit', '18.1.8'),
+    ('git', '2.49.0'),
+]
+
+dependencies = [
+    ('libxml2', '2.13.4'),
+    ('ncurses', '6.5'),
+    ('zlib', '1.3.1'),
+    ('Z3', '4.13.4'),
+]
+
+build_shared_libs = True
+
+minimal = False
+
+bootstrap = True
+full_llvm = False
+build_clang_extras = True
+build_runtimes = True
+build_lld = True
+build_lldb = True
+build_bolt = True
+build_openmp = True
+build_openmp_offload = True
+build_openmp_tools = True
+usepolly = True
+
+python_bindings = True
+
+# build_targets = ['all']
+# disable_werror = True
+
+skip_all_tests = False
+skip_sanitizer_tests = False
+test_suite_max_failed = 20  # Could increase depending on of number of targets compiled for
+test_suite_timeout_single = 5 * 60
+# test_suite_timeout_total = 10*3600
+
+moduleclass = 'compiler'
