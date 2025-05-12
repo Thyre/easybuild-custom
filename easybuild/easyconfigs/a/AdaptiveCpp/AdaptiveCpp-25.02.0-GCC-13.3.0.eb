@@ -1,0 +1,47 @@
+easyblock = 'CMakeMake'
+
+name = 'AdaptiveCpp'
+version = '25.02.0'
+versionsuffix = '-CUDA-%(cudaver)s'
+
+homepage = 'https://github.com/AdaptiveCpp/AdaptiveCpp'
+description = """AdaptiveCpp is the independent, community-driven modern platform
+for C++-based heterogeneous programming models targeting CPUs and GPUs from all
+major vendors. AdaptiveCpp lets applications adapt themselves to all the hardware
+found in the system. This includes use cases where a single binary needs to be
+able to target all supported hardware, or utilize hardware from different vendors
+simultaneously."""
+
+toolchain = {'name': 'GCC', 'version': '13.3.0'}
+
+source_urls = ["https://github.com/illuhad/hipSYCL/archive/refs/tags/"]
+sources = ["v%(version)s.tar.gz"]
+checksums = ['8cc8a3be7bb38f88d7fd51597e0ec924b124d4233f64da62a31b9945b55612ca']
+
+dependencies = [
+    ('Boost', '1.85.0'),
+    ('Clang', '18.1.8'),
+    ('Python', '3.12.3'),
+    ('CUDA', '12.6.0', '', SYSTEM),
+]
+
+builddependencies = [
+    ('CMake', '3.29.3'),
+]
+
+configopts = '-DLLVM_DIR=$EBROOTCLANG/lib/cmake '
+configopts += '-DCLANG_EXECUTABLE_PATH=$EBROOTCLANG/bin/clang++ '
+configopts += '-DCLANG_INCLUDE_PATH=$EBROOTCLANG/lib/clang/18/include '
+configopts += '-DWITH_CUDA_BACKEND=ON '
+configopts += '-DCUDA_TOOLKIT_ROOT_DIR=$EBROOTCUDA '
+configopts += '-DWITH_CPU_BACKEND=ON '
+configopts += '-DWITH_ROCM_BACKEND=OFF '
+
+sanity_check_paths = {
+    'files': ['bin/syclcc-clang', 'include/sycl/sycl.hpp',
+              'lib/hipSYCL/librt-backend-omp.%s' % SHLIB_EXT],
+    'dirs': ['include/CL', 'include/hipSYCL', 'include/SYCL', 'lib'],
+}
+sanity_check_commands = ['syclcc --help']
+
+moduleclass = 'compiler'
