@@ -1,0 +1,46 @@
+easyblock = "PythonBundle"
+
+name = 'Extra-P'
+version = '4.2.3'
+
+homepage = 'https://github.com/extra-p/extrap'
+description = """
+Extra-P is an automatic performance-modeling tool for HPC applications 
+that supports the user in the identification of scalability issues.
+"""
+
+toolchain = {'name': 'foss', 'version': '2024a'}
+
+dependencies = [
+    ('Python', '3.12.3'),
+    ('PyQt6', '6.9.0'),
+    ('SciPy-bundle', '2024.05'),
+    ('tqdm', '4.66.5'),
+    ('matplotlib', '3.9.2'),
+    ('scikit-learn', '1.5.2'),
+]
+
+exts_list = [
+    ('pycubexr', '2.0.1', {
+        'checksums': ['699643c076b603fb1140564da6c4589b73ec9efd3b9112cd3d957f5bee646915'],
+    }),
+    ('marshmallow', '3.26.1', {
+        'checksums': ['e6d8affb6cb61d39d26402096dc0aee12d5a26d490a121f118d2e81dc0719dc6'],
+    }),
+    ('extrap', version, {
+        'checksums': ['d88d69b48b75bca1ce7b10d892e15f21ac98ec1ddd7f670f949e5d2089353afd'],
+    }),
+]
+
+runtest = True
+tests = ["extrap --help"]
+
+sanity_check_paths = {
+    'files': [
+        "lib/python3.12/site-packages/extrap/extrap/extrapcmd.py",
+        "lib/python3.12/site-packages/extrap/extrap/extrapgui.py"
+    ],
+    'dirs': ["lib/python3.13/site-packages/extrap"]
+}
+
+moduleclass = "perf"
