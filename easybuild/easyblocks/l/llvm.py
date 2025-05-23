@@ -231,7 +231,7 @@ class EB_LLVM(CMakeMake):
 
     def __init__(self, *args, **kwargs):
         """Initialize LLVM-specific variables."""
-        super(EB_LLVM, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.llvm_src_dir = None
         self.llvm_obj_dir_stage1 = None
@@ -348,6 +348,10 @@ class EB_LLVM(CMakeMake):
         if self.cfg['build_bolt']:
             self.final_projects.append('bolt')
 
+        # Fix for https://github.com/easybuilders/easybuild-easyblocks/issues/3689
+        if LooseVersion(self.version) < LooseVersion('16'):
+            general_opts['LLVM_INCLUDE_GO_TESTS'] = 'OFF'
+
         # Sysroot
         sysroot = build_option('sysroot')
         if sysroot:
@@ -434,7 +438,7 @@ class EB_LLVM(CMakeMake):
             if self.nvptx_target_cond:
                 if LooseVersion(self.version) < LooseVersion('20') and not cuda_cc_list:
                     raise EasyBuildError(
-                        f"LLVM < 20 requires 'cuda-compute-capabilities' to build with {BUILD_TARGET_NVPTX}"
+                        f"LLVM < 20 requires 'cuda_compute_capabilities' to build with {BUILD_TARGET_NVPTX}"
                     )
                 self.cuda_cc = [cc.replace('.', '') for cc in cuda_cc_list]
                 self.offload_targets += ['cuda']
@@ -456,7 +460,7 @@ class EB_LLVM(CMakeMake):
         """Prepare step, modified to ensure install dir is deleted before building"""
         super(EB_LLVM, self).prepare_step(*args, **kwargs)
         # re-create installation dir (deletes old installation),
-        # Needed to unsure hardcoded rpath do not point to old installation during runtime builds and testing
+        # Needed to ensure hardcoded rpath do not point to old installation during runtime builds and testing
         self.make_installdir()
 
     def _add_cmake_runtime_args(self):
@@ -591,7 +595,8 @@ class EB_LLVM(CMakeMake):
         if self.cfg.parallel:
             self.make_parallel_opts = f"-j {self.cfg.parallel}"
 
-        # Moved here from the __init__ to ensure this easyblock can be used as a Bundle component
+        # CMAKE_INSTALL_PREFIX and LLVM start directory are set here instead of in __init__ to
+        # ensure this easyblock can be used as a Bundle component, see
         # https://github.com/easybuilders/easybuild-easyblocks/issues/3680
         general_opts['CMAKE_INSTALL_PREFIX'] = self.installdir
         start_dir = self.cfg['start_dir']
@@ -683,16 +688,18 @@ class EB_LLVM(CMakeMake):
         self.add_cmake_opts()
 
         src_dir = os.path.join(self.llvm_src_dir, 'llvm')
-        output = super(EB_LLVM, self).configure_step(builddir=self.llvm_obj_dir_stage1, srcdir=src_dir)
+        output = super().configure_step(builddir=self.llvm_obj_dir_stage1, srcdir=src_dir)
 
-        # Get the LLVM HOST TRIPLE (e.g. x86_64-unknown-linux-gnu) from the output
+        # Get LLVM_HOST_TRIPLE (e.g. x86_64-unknown-linux-gnu) from the output
         for line in output.splitlines():
             if 'llvm host triple' in line.lower():
                 self.host_triple = line.split(':')[1].strip()
                 break
         else:
+            # LLVM_HOST_TRIPLE needs to be set when building runtimes or bootstrapping.
             if self.cfg['build_runtimes'] or self.cfg['bootstrap']:
                 raise EasyBuildError("`LLVM_HOST_TRIPLE` not found in the output of the configure step")
+            # Otherwise it can be inferred a posteriori from the install directory
             else:
                 self.log.warning("`LLVM_HOST_TRIPLE` not found in the output of the configure step")
 
@@ -866,9 +873,6 @@ class EB_LLVM(CMakeMake):
         # e.g. when calling the compiled clang-ast-dump for stage 3
         lib_path = os.path.join(stage_dir, lib_dir_runtime)
 
-        #######################################################
-        # PROBLEM!!!:
-        #################################################
         bin_dir_new = os.path.join(stage_dir, 'bin')
         mkdir(bin_dir_new, parents=True)
         with _wrap_env(bin_dir_new, lib_path):
@@ -900,6 +904,7 @@ class EB_LLVM(CMakeMake):
 
             symlink(os.path.join(stage_dir, 'opt'), os.path.join(clang_mock_wrapper_dir, 'opt'))
 
+            # Use mocked rpath wrappers
             self.runtimes_cmake_args['CMAKE_C_COMPILER'] = [clang_mock]
             self.runtimes_cmake_args['CMAKE_CXX_COMPILER'] = [clangxx_mock]
 
@@ -915,7 +920,7 @@ class EB_LLVM(CMakeMake):
             print_msg("Building stage 1/1")
 
         change_dir(self.llvm_obj_dir_stage1)
-        super(EB_LLVM, self).build_step(*args, **kwargs)
+        super().build_step(*args, **kwargs)
 
         if self.cfg['bootstrap']:
             self.log.info("Building stage 2")
@@ -1051,7 +1056,7 @@ class EB_LLVM(CMakeMake):
 
             self.cfg.update('preinstallopts', f'LD_LIBRARY_PATH={lib_path}')
 
-        super(EB_LLVM, self).install_step()
+        super().install_step()
 
         # copy Python bindings here in post-install step so that it is not done more than once in multi_deps context
         if self.cfg['python_bindings']:
@@ -1328,7 +1333,7 @@ class EB_LLVM(CMakeMake):
         else:
             self._sanity_check_gcc_prefix(gcc_prefix_compilers, self.gcc_prefix, self.installdir)
 
-        return super(EB_LLVM, self).sanity_check_step(custom_paths=custom_paths, custom_commands=custom_commands)
+        return super().sanity_check_step(custom_paths=custom_paths, custom_commands=custom_commands)
 
     def make_module_step(self, *args, **kwargs):
         """
@@ -1352,7 +1357,7 @@ class EB_LLVM(CMakeMake):
 
     def make_module_extra(self):
         """Custom variables for Clang module."""
-        txt = super(EB_LLVM, self).make_module_extra()
+        txt = super().make_module_extra()
         # we set the symbolizer path so that asan/tsan give meanfull output by default
         asan_symbolizer_path = os.path.join(self.installdir, 'bin', 'llvm-symbolizer')
         txt += self.module_generator.set_environment('ASAN_SYMBOLIZER_PATH', asan_symbolizer_path)
