@@ -1,0 +1,30 @@
+name = 'CMake'
+version = '3.31.3'
+
+homepage = 'https://www.cmake.org'
+
+description = """
+ CMake, the cross-platform, open-source build system.  CMake is a family of
+ tools designed to build, test and package software.
+"""
+
+toolchain = SYSTEM
+
+source_urls = ['https://www.cmake.org/files/v%(version_major_minor)s']
+sources = [SOURCELOWER_TAR_GZ]
+checksums = ['fac45bc6d410b49b3113ab866074888d6c9e9dc81a141874446eb239ac38cb87']
+
+builddependencies = [
+    ('ncurses', '6.5'),
+]
+
+dependencies = [
+    ('OpenSSL', '3'),
+]
+
+configopts = "-- "
+configopts += "-DCURSES_CURSES_LIBRARY=$EBROOTNCURSES/lib/libcurses.a "
+configopts += "-DCURSES_FORM_LIBRARY=$EBROOTNCURSES/lib/libform.a "
+configopts += "-DCURSES_NCURSES_LIBRARY=$EBROOTNCURSES/lib/libncurses.a "
+
+moduleclass = 'devel'
