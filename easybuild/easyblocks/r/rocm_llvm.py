@@ -33,6 +33,7 @@ import os
 from easybuild.tools import LooseVersion
 from easybuild.easyblocks.llvm import EB_LLVM, general_opts
 from easybuild.tools.filetools import apply_regex_substitutions, mkdir, remove_dir
+from easybuild.tools.build_log import EasyBuildError
 from easybuild.tools.config import build_option
 
 class EB_ROCm_minus_LLVM(EB_LLVM):
@@ -52,7 +53,10 @@ class EB_ROCm_minus_LLVM(EB_LLVM):
         })
 
         amd_gfx_list = build_option('amdgcn_capabilities') or self.cfg['amdgcn_capabilities'] or []
-        if LooseVersion('19') <= LooseVersion(self.version) < LooseVersion('20') and amd_gfx_list:
+        if not amd_gfx_list:
+            raise EasyBuildError("Expected amdgcn_capabilities to be set to build this EasyConfig. "
+                                 "Please specify either --amdgcn_capabilities, or set amdgcn_capabilities in the EasyConfig!")
+        if LooseVersion('19') <= LooseVersion(self.version) < LooseVersion('20'):
             self.runtimes_cmake_args['LIBOMPTARGET_AMDGCN_GFXLIST'] = '%s' % '|'.join(amd_gfx_list)
         self.runtimes_cmake_args['AMDDeviceLibs_DIR'] = os.path.join(
             self.llvm_obj_dir_stage2, 'tools', 'device-libs', 'lib64', 'cmake', 'AMDDeviceLibs'

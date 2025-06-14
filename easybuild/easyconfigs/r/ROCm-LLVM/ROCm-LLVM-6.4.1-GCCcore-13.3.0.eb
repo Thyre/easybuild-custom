@@ -11,23 +11,23 @@ It is an AMD Fork of The LLVM Compiler Infrastructure, and aims to contain all o
 It also includes several AMD-specific additions in the llvm-project/amd directory."""
 docurls = ['https://rocmdocs.amd.com']
 
-toolchain = {'name': 'GCCcore', 'version': '13.3.0'}
+toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
 
 builddependencies = [
-    ('CMake', '3.29.3'),
-    ('Perl', '5.38.2'),
-    ('Python', '3.12.3'),
-    ('pkgconf', '2.2.0'),
-    ('xxd', '9.1.1275'), # required for ROCR-Runtime
+    ('CMake', '3.31.3'),
+    ('Perl', '5.40.0'),
+    ('Python', '3.13.1'),
+    ('pkgconf', '2.3.0'),
+    ('xxd', '9.1.1457'), # required for ROCR-Runtime
 ]
 
 dependencies = [
     ('binutils', '2.42'),
-    ('elfutils', '0.191'),
+    ('elfutils', '0.193'),
     ('zlib', '1.3.1'),
-    ('hwloc', '2.10.0'),
+    ('hwloc', '2.11.2'),
     ('GMP', '6.3.0'),
-    ('libxml2', '2.12.7'),
+    ('libxml2', '2.13.4'),
     ('ncurses', '6.5'),
     ('libffi', '3.4.5'),
     ('libdrm', '2.4.122'),
