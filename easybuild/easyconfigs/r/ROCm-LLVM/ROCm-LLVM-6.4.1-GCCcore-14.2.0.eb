@@ -30,9 +30,9 @@ dependencies = [
     ('libxml2', '2.13.4'),
     ('ncurses', '6.5'),
     ('libffi', '3.4.5'),
-    ('libdrm', '2.4.122'),
-    ('numactl', '2.0.18'),
-#    ('Z3', '4.13.0'),
+    ('libdrm', '2.4.125'),
+    ('numactl', '2.0.19'),
+#    ('Z3', '4.13.4'),
 ]
 
 local_rocm_llvm_source = 'llvm-project-rocm-%s.tar.gz' % _rocm_version
