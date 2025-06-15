@@ -68,7 +68,7 @@ components = [
         'build_lld': True,
         'build_clang_extras': True,
         'build_openmp_offload': False,
-        'build_openmp_tools': False,
+        'build_openmp_tools': True,
         'build_runtimes': True,
         'full_llvm': False,
         'skip_all_tests': True,
