@@ -23,10 +23,10 @@ dependencies = [
     ('ROCm-LLVM', '%(version)s'),
 ]
 
-configopts = '-DCMAKE_C_COMPILER=$EBROOTCLANGMINAOMP/bin/clang'
-configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTCLANGMINAOMP/bin/clang++'
-configopts += ' -DLLVM_INSTALL_PREFIX=$EBROOTCLANGMINAOMP'
-configopts += ' -DLLVM_DIR=$EBROOTCLANGMINAOMP'
+configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/clang'
+configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/clang++'
+configopts += ' -DLLVM_INSTALL_PREFIX=$EBROOTROCMMINLLVM'
+configopts += ' -DLLVM_DIR=$EBROOTROCMMINLLVM'
 
 sanity_check_paths = {
     'files': ['share/rocm/cmake/ROCMConfig.cmake', 'share/rocm/cmake/ROCMConfigVersion.cmake',
