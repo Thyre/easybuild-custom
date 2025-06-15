@@ -1,0 +1,52 @@
+easyblock = 'CMakeMake'
+
+name = 'HIPIFY'
+_rocm_version = '6.4.1'
+version = f'{_rocm_version}'
+
+homepage = 'https://github.com/ROCm/HIPIFY'
+description = """HIPIFY is a set of tools that you can use to automatically
+translate CUDA source code into portable HIP C++."""
+docurls = ['https://rocm.docs.amd.com/projects/HIPIFY/en/latest/']
+
+toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
+
+github_account = 'ROCm'
+source_urls = [GITHUB_SOURCE]
+sources = [f'rocm-{_rocm_version}.tar.gz']
+checksums = ['f22595edb0501bc29aa62263a65333748ebb5a50db80179f6c8e5141697a22ef']
+
+builddependencies = [
+    ('binutils', '2.42'),
+    ('CMake', '3.31.3'),
+]
+dependencies = [
+    ('ROCm-LLVM', f'{_rocm_version}'),
+    ('Perl', '5.40.0')
+]
+
+# We use non rpath wrapper until we have a proper toolchain.
+# Therefore, ROCm rpath test fails expectedly
+check_readelf_rpath = False
+
+configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang '
+configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
+
+postinstallcmds = [
+    'chmod oga+x %(installdir)s/bin/hipify-perl',
+    'chmod oga+x %(installdir)s/bin/*.sh',
+]
+
+sanity_check_paths = {
+    'files': ['bin/hipify-clang',
+              'bin/hipify-perl'],
+    'dirs': ['bin',
+             'libexec/hipify',
+             'include/hipify'],
+}
+sanity_check_commands = [
+    'hipify-clang --version',
+    'hipify-perl --version'
+]
+
+moduleclass = 'tools'
