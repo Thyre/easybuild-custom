@@ -27,6 +27,8 @@ dependencies = [
     ('HIP', f'{_rocm_version}', '-amd'),
     ('rocTracer', f'{_rocm_version}'),
     ('Tensile', '4.43.0'),
+    ('glog', '0.7.1'),
+    ('fmt', '11.2.0'),
 ]
 
 # We use non rpath wrapper until we have a proper toolchain.
