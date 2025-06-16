@@ -1,0 +1,61 @@
+easyblock = 'CMakeMake'
+
+name = 'rocSOLVER'
+version = '3.28.0'
+_rocm_version = '6.4.1'
+versionsuffix = f'-ROCm-{_rocm_version}'
+
+homepage = 'https://github.com/ROCm/rocSOLVER'
+description = """rocSOLVER exposes a common interface that provides Basic Linear
+Algebra Subroutines (BLAS) for sparse computation. It's implemented on top of
+AMD ROCm runtime and toolchains. rocSOLVER is created using the HIP programming
+language and optimized for AMD's latest discrete GPUs."""
+docurls = ['https://rocm.docs.amd.com/projects/rocSOLVER/en/latest/']
+
+toolchain = {'name': 'GCC', 'version': '14.2.0'}
+
+github_account = 'ROCm'
+source_urls = [GITHUB_SOURCE]
+sources = [f'rocm-{_rocm_version}.tar.gz']
+patches = ['rocSOLVER-3.28.0_use_easybuild_paths.patch',]
+checksums = [
+    # rocm-6.4.1.tar.gz
+    'd27d3e0a59fbe1fb82172f545e38857643bb86fa1cd69ba51e9e292440a785c6',
+    # rocSOLVER-3.28.0_use_easybuild_paths.patch
+    '6cbb6714ca1be5c987a80bb64af14d68901ba71910be291d5fc82f3698f25cf8']
+
+builddependencies = [
+    ('binutils', '2.42'),
+    ('CMake', '3.31.3'),
+]
+
+dependencies = [
+    ('ROCm-LLVM', f'{_rocm_version}'),
+    ('HIP', f'{_rocm_version}', '-amd'),
+    ('rocBLAS', '4.4.0', f'-ROCm-{_rocm_version}'),
+    ('rocPRIM', '3.4.0', f'-ROCm-{_rocm_version}'),
+    ('rocSPARSE', '3.4.0', f'-ROCm-{_rocm_version}'),
+    ('fmt', '11.2.0'),
+]
+
+# We use non rpath wrapper until we have a proper toolchain.
+# Therefore, ROCm rpath test fails expectedly
+check_readelf_rpath = False
+
+configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang '
+configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
+# Build options as specified in AMD build scripts and TheRock monobuild repo
+configopts += '-DHIP_PLATFORM=amd '
+# TODO: Replace with build option provided by Framework PR: EasyBlock?
+configopts += '-DGPU_TARGETS=gfx1201 '
+
+
+sanity_check_paths = {
+    'files': ['lib/cmake/rocsolver/rocsolver-config.cmake',
+              'include/rocsolver/rocsolver.h'],
+    'dirs': ['lib/cmake/rocsolver',
+             'share/doc/rocsolver',
+             'include/rocsolver'],
+}
+
+moduleclass = 'lib'
