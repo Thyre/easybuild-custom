@@ -30,7 +30,7 @@ dependencies = [
     ('glog', '0.7.1'),
     ('fmt', '11.2.0'),
     ('rocprofiler-register', f'{_rocm_version}'),
-    # TODO: hipBLASLt is missing here, but painful to build...
+    ('hipBLASLt', '0.12.1', f'-ROCm-{_rocm_version}'),
 ]
 
 # We use non rpath wrapper until we have a proper toolchain.
