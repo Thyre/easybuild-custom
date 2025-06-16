@@ -29,6 +29,8 @@ dependencies = [
     ('Tensile', '4.43.0'),
     ('glog', '0.7.1'),
     ('fmt', '11.2.0'),
+    ('rocprofiler-register', f'{_rocm_version}'),
+    # TODO: hipBLASLt is missing here, but painful to build...
 ]
 
 # We use non rpath wrapper until we have a proper toolchain.

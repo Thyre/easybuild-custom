@@ -25,6 +25,8 @@ builddependencies = [
 dependencies = [
     ('ROCm-LLVM', '%(version)s'),
     ('HIP', '%(version)s', '-amd'),
+    ('glog', '0.7.1'),
+    ('rocprofiler-register', f'{_rocm_version}'),
 ]
 
 # We use non rpath wrapper until we have a proper toolchain.

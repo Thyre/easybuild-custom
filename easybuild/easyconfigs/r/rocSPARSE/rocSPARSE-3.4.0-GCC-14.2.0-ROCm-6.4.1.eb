@@ -29,6 +29,8 @@ dependencies = [
     ('rocBLAS', '4.4.0', f'-ROCm-{_rocm_version}'),
     ('rocPRIM', '3.4.0', f'-ROCm-{_rocm_version}'),
     ('rocTracer', '6.4.1'),
+    ('glog', '0.7.1'),
+    ('rocprofiler-register', f'{_rocm_version}'),
 ]
 
 # We use non rpath wrapper until we have a proper toolchain.
