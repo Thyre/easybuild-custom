@@ -1,0 +1,53 @@
+easyblock = 'CMakeMake'
+
+name = 'rocBLAS'
+version = '3.3.0'
+_rocm_version = '6.4.1'
+versionsuffix = f'-ROCm-{_rocm_version}'
+
+homepage = 'https://github.com/ROCm/rocAND'
+description = """rocBLAS is the ROCm Basic Linear Algebra Subprograms (BLAS) library.
+rocBLAS is implemented in the HIP programming language and optimized for AMD GPUs."""
+docurls = ['https://rocm.docs.amd.com/projects/rocBLAS/en/latest/']
+
+toolchain = {'name': 'GCC', 'version': '14.2.0'}
+
+github_account = 'ROCm'
+source_urls = [GITHUB_SOURCE]
+sources = [f'rocm-{_rocm_version}.tar.gz']
+checksums = ['517950ff6b3715dee8b2bcfbdd3968c65e1910e4b8e353e148574ae08aa6dc73']
+
+builddependencies = [
+    ('binutils', '2.42'),
+    ('CMake', '3.31.3'),
+]
+dependencies = [
+    ('Python', '3.13.1'),
+    ('ROCm-LLVM', f'{_rocm_version}'),
+    ('HIP', f'{_rocm_version}', '-amd'),
+    ('rocTracer', f'{_rocm_version}'),
+    ('Tensile', '4.43.0'),
+]
+
+# We use non rpath wrapper until we have a proper toolchain.
+# Therefore, ROCm rpath test fails expectedly
+check_readelf_rpath = False
+
+configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang '
+configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
+# Build options as specified in AMD build scripts and TheRock monobuild repo
+configopts += '-DHIP_PLATFORM=amd -DBUILD_WITH_PIP=OFF '
+# TODO: Replace with build option provided by Framework PR: EasyBlock?
+configopts += '-DAMDGPU_TARGETS=gfx1201 '
+
+
+sanity_check_paths = {
+    'files': ['lib/librocblas.so',
+              'lib/cmake/rocblas/rocblas-config.cmake',
+              'include/rocblas/rocblas.h'],
+    'dirs': ['lib/cmake/rocblas',
+             'share/doc/rocblas',
+             'include/rocblas'],
+}
+
+moduleclass = 'lib'
