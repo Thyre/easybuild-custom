@@ -1,0 +1,55 @@
+easyblock = 'CMakeMake'
+
+name = 'rocSPARSE'
+version = '3.4.0'
+_rocm_version = '6.4.1'
+versionsuffix = f'-ROCm-{_rocm_version}'
+
+homepage = 'https://github.com/ROCm/rocSPARSE'
+description = """rocSPARSE exposes a common interface that provides Basic Linear
+Algebra Subroutines (BLAS) for sparse computation. It's implemented on top of
+AMD ROCm runtime and toolchains. rocSPARSE is created using the HIP programming
+language and optimized for AMD's latest discrete GPUs."""
+docurls = ['https://rocm.docs.amd.com/projects/rocSPARSE/en/latest/']
+
+toolchain = {'name': 'GCC', 'version': '14.2.0'}
+
+github_account = 'ROCm'
+source_urls = [GITHUB_SOURCE]
+sources = [f'rocm-{_rocm_version}.tar.gz']
+checksums = ['f44db33179d5f8e18f948ff3ac8bd9b59f7bfdd67c66a7972ef1ee0eb15872de']
+
+builddependencies = [
+    ('binutils', '2.42'),
+    ('CMake', '3.31.3'),
+]
+dependencies = [
+    ('ROCm-LLVM', f'{_rocm_version}'),
+    ('HIP', f'{_rocm_version}', '-amd'),
+    ('rocBLAS', '4.4.0', f'-ROCm-{_rocm_version}'),
+    ('rocPRIM', '3.4.0', f'-ROCm-{_rocm_version}'),
+    ('rocTracer', '6.4.1'),
+]
+
+# We use non rpath wrapper until we have a proper toolchain.
+# Therefore, ROCm rpath test fails expectedly
+check_readelf_rpath = False
+
+configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang '
+configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
+# Build options as specified in AMD build scripts and TheRock monobuild repo
+configopts += '-DHIP_PLATFORM=amd '
+# TODO: Replace with build option provided by Framework PR: EasyBlock?
+configopts += '-DGPU_TARGETS=gfx1201 '
+
+
+sanity_check_paths = {
+    'files': ['lib/cmake/rocsparse/rocsparse-config.cmake',
+              'include/rocsparse/rocsparse.h',
+              'include/rocsparse/rocsparse.f90'],
+    'dirs': ['lib/cmake/rocsparse',
+             'share/doc/rocsparse',
+             'include/rocsparse'],
+}
+
+moduleclass = 'lib'
