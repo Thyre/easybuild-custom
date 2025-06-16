@@ -1,11 +1,11 @@
 easyblock = 'CMakeMake'
 
 name = 'rocBLAS'
-version = '3.3.0'
+version = '4.4.0'
 _rocm_version = '6.4.1'
 versionsuffix = f'-ROCm-{_rocm_version}'
 
-homepage = 'https://github.com/ROCm/rocAND'
+homepage = 'https://github.com/ROCm/rocBLAS'
 description = """rocBLAS is the ROCm Basic Linear Algebra Subprograms (BLAS) library.
 rocBLAS is implemented in the HIP programming language and optimized for AMD GPUs."""
 docurls = ['https://rocm.docs.amd.com/projects/rocBLAS/en/latest/']
