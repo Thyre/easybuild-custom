@@ -1,0 +1,59 @@
+easyblock = 'CMakeMake'
+
+name = 'ROCprofiler-SDK'
+version = '2.0.0'
+_rocm_version = '6.4.1'
+versionsuffix = f'-ROCm-{_rocm_version}'
+
+homepage = 'https://github.com/ROCm/ROCProfiler-SDK'
+description = """ROCprofiler-SDK is AMD’s new and improved tooling infrastructure, providing
+a hardware-specific low-level performance analysis interface for profiling and tracing GPU
+compute applications."""
+docurls = ['https://rocm.docs.amd.com/projects/ROCProfiler-SDK/']
+
+toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
+
+github_account = 'ROCm'
+source_urls = [GITHUB_SOURCE]
+sources = [f'rocm-{_rocm_version}.tar.gz']
+checksums = ['d816f6d7bd138c15d68bceb111847a12ecff5efb50831bb4c3e02fab102ab471']
+
+builddependencies = [
+    ('binutils', '2.42'),
+    ('CMake', '3.31.3'),
+    ('Doxygen', '1.14.0'),
+    ('git', '2.49.0'),
+]
+dependencies = [
+    ('ROCm-LLVM', f'{_rocm_version}'),
+    ('HIP', f'{_rocm_version}', '-amd'),
+    ('glog', '0.7.1'),
+    ('numactl', '2.0.19'),
+    ('rocTracer', '6.4.1'),
+    # ROCProfiler requires `aqlprofile`, which was open-sourced just two weeks ago
+    # and has no release yet. Therefore, only buildable if we'd use rpm / deb package of it.
+    ('aqlprofile', '...')
+]
+
+# We use non rpath wrapper until we have a proper toolchain.
+# Therefore, ROCm rpath test fails expectedly
+check_readelf_rpath = False
+
+configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/clang '
+configopts += '-DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/clang++ '
+# Disable all the external component builds
+configopts += '-DROCPROFILER_BUILD_GHC_FS=OFF '
+configopts += '-DROCPROFILER_BUILD_GTEST=OFF '
+configopts += '-DROCPROFILER_BUILD_GLOG=OFF '
+configopts += '-DROCPROFILER_BUILD_FMT=OFF '
+configopts += ''
+# Additional requirements need to be provided by hand, e.g.
+# PTL, cereal,
+# Others need to be patched out explicitly, e.g.
+# yaml-cpp, perfetto, elfio, otf2, json
+
+sanity_check_paths = {
+    '...'
+}
+
+moduleclass = 'tools'
