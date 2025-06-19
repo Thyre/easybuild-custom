@@ -58,7 +58,8 @@ configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
 # Build options as specified in AMD build scripts and TheRock monobuild repo
 configopts += '-DHIP_PLATFORM=amd '
 # TODO: Replace with build option provided by Framework PR: EasyBlock?
-configopts += '-DHCC_CXX_FLAGS="-fno-gpu-rdc --offload-arch=gfx1201" '
+# TODO: Option may be hard-coded. Remove this option from the CMakeLists.txt and provide our own list here.
+configopts += '-DHCC_CXX_FLAGS="-fno-gpu-rdc --offload-arch=%(amdgcn_cc_semicolon_sep)s" '
 # Prevent RVS from ever using internal rocBLAS or ROCm-SMI
 configopts += '-DRVS_ROCBLAS=0 -DRVS_ROCMSMI=0 '
 

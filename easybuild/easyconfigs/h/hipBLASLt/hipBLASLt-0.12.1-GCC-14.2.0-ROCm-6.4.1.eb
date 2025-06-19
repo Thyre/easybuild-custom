@@ -56,7 +56,7 @@ configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
 # Build options as specified in AMD build scripts and TheRock monobuild repo
 configopts += '-DHIPBLASLT_ENABLE_BLIS=OFF '
 # TODO: Replace with build option provided by Framework PR: EasyBlock?
-configopts += '-DAMDGPU_TARGETS=gfx1201 '
+configopts += '-DAMDGPU_TARGETS=%(amdgcn_cc_semicolon_sep)s '
 # rocRoller has no release yet, and is not supported for RHEL < 9.5.
 # Therefore, disable to to be safe.
 configopts += '-DHIPBLASLT_USE_ROCROLLER=OFF '

@@ -42,7 +42,7 @@ configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
 # Build options as specified in AMD build scripts and TheRock monobuild repo
 configopts += '-DHIP_PLATFORM=amd '
 # TODO: Replace with build option provided by Framework PR: EasyBlock?
-configopts += '-DGPU_TARGETS=gfx1201 '
+configopts += '-DGPU_TARGETS=%(amdgcn_cc_semicolon_sep)s '
 
 
 sanity_check_paths = {
