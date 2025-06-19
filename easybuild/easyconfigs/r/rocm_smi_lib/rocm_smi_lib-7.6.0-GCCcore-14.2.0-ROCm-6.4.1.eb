@@ -35,6 +35,10 @@ sanity_check_paths = {
              'share/doc/rocm_smi']
 }
 
+modextravars = {
+    'ROCM_SMI_LIB_PATH': f'%(installdir)s/lib/librocm_smi64.{SHLIB_EXT}'
+}
+
 sanity_check_commands = [
     'rocm-smi',
 ]
