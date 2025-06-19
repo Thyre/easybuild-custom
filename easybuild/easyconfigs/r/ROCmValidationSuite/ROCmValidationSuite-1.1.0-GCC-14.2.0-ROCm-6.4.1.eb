@@ -64,14 +64,14 @@ configopts += '-DHCC_CXX_FLAGS="-fno-gpu-rdc --offload-arch=%(amdgcn_cc_semicolo
 configopts += '-DRVS_ROCBLAS=0 -DRVS_ROCMSMI=0 '
 
 sanity_check_paths = {
-    'files': ['bin/rvs'],
+    'files': ['bin/rvs',
+              'lib/librvslib.so'],
     'dirs': ['share/rocm-validation-suite/conf',
              'share/man',
-             'lib/librvslib.so',
              'lib/cmake/rvs'],
 }
 sanity_check_commands = [
     'rvs --version'
 ]
 
-moduleclass = 'lib'
+moduleclass = 'tools'
