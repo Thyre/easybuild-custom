@@ -1,0 +1,53 @@
+easyblock = 'CMakeMake'
+
+name = 'rocFFT'
+version = '1.7.0'
+_rocm_version = '6.4.1'
+versionsuffix = f'-ROCm-{_rocm_version}-nompi'
+
+homepage = 'https://github.com/ROCm/rocFFT'
+description = """rocFFT is a software library for computing fast Fourier transforms
+(FFTs) written in the HIP programming language. It's part of AMD's software ecosystem
+based on ROCm. The rocFFT library can be used with AMD and NVIDIA GPUs."""
+docurls = ['https://rocm.docs.amd.com/projects/rocFFT/en/latest/']
+
+toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
+
+github_account = 'ROCm'
+source_urls = [GITHUB_SOURCE]
+sources = [f'rocm-{_rocm_version}.tar.gz']
+checksums = ['66e543990736bc4bf3b27fa085cca3bea0d42252f960be376371549707e35373']
+
+builddependencies = [
+    ('binutils', '2.42'),
+    ('CMake', '3.31.3'),
+    ('Python', '3.13.1'),
+]
+dependencies = [
+    ('ROCm-LLVM', f'{_rocm_version}'),
+    ('HIP', f'{_rocm_version}', '-amd'),
+    ('hipRAND', '2.13.0', f'-ROCm-{_rocm_version}'),
+    ('SQLite', '3.47.2'),
+]
+
+# We use non rpath wrapper until we have a proper toolchain.
+# Therefore, ROCm rpath test fails expectedly
+check_readelf_rpath = False
+
+configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang '
+configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
+# Build options as specified in AMD build scripts and TheRock monobuild repo
+configopts += '-DHIP_PLATFORM=amd '
+configopts += '-DGPU_TARGETS=%(amdgcn_cc_semicolon_sep)s '
+configopts += '-DSQLITE_USE_SYSTEM_PACKAGE=ON '
+
+
+sanity_check_paths = {
+    'files': ['include/rocfft/rocfft.h',
+              f'lib/librocfft.{SHLIB_EXT}',
+              'lib/cmake/rocfft/rocfft-config.cmake'],
+    'dirs': ['share/doc/rocfft',
+             'include/rocfft'],
+}
+
+moduleclass = 'lib'
