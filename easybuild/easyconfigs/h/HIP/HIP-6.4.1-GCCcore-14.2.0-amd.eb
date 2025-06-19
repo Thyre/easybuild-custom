@@ -97,6 +97,7 @@ modextravars = {
     'HIP_LIB_PATH': '%(installdir)s/lib',
     'HIP_PATH': '%(installdir)s',
     'HIP_RUNTIME': 'rocclr',
+    'HIPCC_PATH': '%(installdir)s',
     'ROCM_PATH': '%(installdir)s',
 }
 
