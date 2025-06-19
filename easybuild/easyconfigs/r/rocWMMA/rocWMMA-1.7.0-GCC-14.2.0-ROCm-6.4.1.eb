@@ -1,0 +1,55 @@
+easyblock = 'CMakeMake'
+
+name = 'rocWMMA'
+version = '1.7.0'
+_rocm_version = '6.4.1'
+versionsuffix = f'-ROCm-{_rocm_version}'
+
+homepage = 'https://github.com/ROCm/rocWMMA'
+description = """rocWMMA is a C++ library for accelerating mixed-precision matrix multiply-accumulate (MMA)
+operations leveraging AMD GPU hardware. rocWMMA makes it easier to break down MMA problems into fragments
+and distribute block-wise MMA operations in parallel across GPU wavefronts. The API consists of a header
+library, that can be used to compile MMA acceleration directly into GPU kernel device code. This
+can benefit from compiler optimization in the generation of kernel assembly, and doesn't incur
+additional overhead costs of linking to external runtime libraries or having to launch separate kernels."""
+docurls = ['https://rocm.docs.amd.com/projects/rocWMMA/en/latest/']
+
+toolchain = {'name': 'GCC', 'version': '14.2.0'}
+
+github_account = 'ROCm'
+source_urls = [GITHUB_SOURCE]
+sources = [f'rocm-{_rocm_version}.tar.gz']
+checksums = ['888e9794adff06ca1be811d80018e761b9a9cf84cb88dec9e51bc3a6db7a359a']
+
+builddependencies = [
+    ('binutils', '2.42'),
+    ('CMake', '3.31.3'),
+    ('googletest', '1.17.0'),
+    ('rocm_smi_lib', '7.6.0', f'-ROCm-{_rocm_version}'), # Required for tests
+]
+dependencies = [
+    ('ROCm-LLVM', f'{_rocm_version}'),
+    ('HIP', f'{_rocm_version}', '-amd'),
+    ('rocBLAS', '4.4.0', f'-ROCm-{_rocm_version}'),
+]
+
+# We use non rpath wrapper until we have a proper toolchain.
+# Therefore, ROCm rpath test fails expectedly
+check_readelf_rpath = False
+
+configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang '
+configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
+# Build options as specified in AMD build scripts and TheRock monobuild repo
+configopts += '-DHIP_PLATFORM=amd '
+configopts += '-DGPU_TARGETS=%(amdgcn_cc_semicolon_sep)s '
+configopts += '-DROCWMMA_USE_SYSTEM_GOOGLETEST=ON '
+
+
+sanity_check_paths = {
+    'files': ['include/rocwmma/rocwmma.hpp',
+              'bin/hipRTC_gemm'],
+    'dirs': ['share/doc/rocwmma',
+             'include/rocwmma'],
+}
+
+moduleclass = 'lib'
