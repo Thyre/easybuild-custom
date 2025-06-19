@@ -1,5 +1,5 @@
 name = 'CMake'
-version = '3.31.3'
+version = '3.31.8'
 
 homepage = 'https://www.cmake.org'
 
@@ -12,7 +12,7 @@ toolchain = SYSTEM
 
 source_urls = ['https://www.cmake.org/files/v%(version_major_minor)s']
 sources = [SOURCELOWER_TAR_GZ]
-checksums = ['fac45bc6d410b49b3113ab866074888d6c9e9dc81a141874446eb239ac38cb87']
+checksums = ['e3cde3ca83dc2d3212105326b8f1b565116be808394384007e7ef1c253af6caa']
 
 builddependencies = [
     ('ncurses', '6.5'),

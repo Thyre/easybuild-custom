@@ -66,6 +66,6 @@ if withnvptx or withamdgcn:
     osdependencies = ['perl']
 # When building offloading for AMD GCN we need CMake to build LLVM source
 if withamdgcn:
-    builddependencies += [('CMake', '3.31.3')]
+    builddependencies += [('CMake', '3.31.8')]
 
 moduleclass = 'compiler'
