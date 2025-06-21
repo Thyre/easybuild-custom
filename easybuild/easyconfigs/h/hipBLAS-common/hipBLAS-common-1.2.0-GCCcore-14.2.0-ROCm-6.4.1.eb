@@ -1,4 +1,4 @@
-easyblock = 'CMakeMake'
+easyblock = 'EB_ROCmComponent'
 
 name = 'hipBLAS-common'
 version = '1.2.0'
@@ -22,14 +22,6 @@ builddependencies = [
 dependencies = [
     ('ROCm-LLVM', f'{_rocm_version}'),
 ]
-
-# We use non rpath wrapper until we have a proper toolchain.
-# Therefore, ROCm rpath test fails expectedly
-check_readelf_rpath = False
-
-configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang '
-configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
-
 
 sanity_check_paths = {
     'files': ['lib/cmake/hipblas-common/hipblas-common-config.cmake',

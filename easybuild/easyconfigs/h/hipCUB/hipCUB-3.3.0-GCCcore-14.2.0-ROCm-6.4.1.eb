@@ -1,4 +1,4 @@
-easyblock = 'CMakeMake'
+easyblock = 'EB_ROCmComponent'
 
 name = 'hipCUB'
 version = '3.3.0'
@@ -26,19 +26,6 @@ dependencies = [
     ('HIP', f'{_rocm_version}', '-amd'),
     ('rocPRIM', '3.4.0', f'-ROCm-{_rocm_version}')
 ]
-
-# We use non rpath wrapper until we have a proper toolchain.
-# Therefore, ROCm rpath test fails expectedly
-check_readelf_rpath = False
-
-configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang '
-configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
-configopts += ' -DCMAKE_HIP_COMPILER=$EBROOTHIP/bin/hipcc '
-# Build options as specified in AMD build scripts and TheRock monobuild repo
-configopts += '-DHIP_PLATFORM=amd '
-# TODO: Replace with build option provided by Framework PR: EasyBlock?
-configopts += '-DAMDGPU_TARGETS=%(amdgcn_cc_semicolon_sep)s '
-
 
 sanity_check_paths = {
     'files': ['lib/cmake/hipcub/hipcub-config.cmake',

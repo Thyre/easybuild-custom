@@ -1,4 +1,4 @@
-easyblock = 'CMakeMake'
+easyblock = 'EB_ROCmComponent'
 
 name = 'rocTracer'
 version = '6.4.1'
@@ -28,13 +28,6 @@ dependencies = [
     ('glog', '0.7.1'),
     ('rocprofiler-register', '%(version)s'),
 ]
-
-# We use non rpath wrapper until we have a proper toolchain.
-# Therefore, ROCm rpath test fails expectedly
-check_readelf_rpath = False
-
-configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/clang'
-configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/clang++'
 
 sanity_check_paths = {
     'files': ['lib/libroctracer64.so',

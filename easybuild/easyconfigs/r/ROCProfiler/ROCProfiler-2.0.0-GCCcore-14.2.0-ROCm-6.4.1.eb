@@ -1,4 +1,4 @@
-easyblock = 'CMakeMake'
+easyblock = 'EB_ROCmComponent'
 
 name = 'ROCProfiler'
 version = '2.0.0'
@@ -33,13 +33,6 @@ dependencies = [
     # and has no release yet. Therefore, only buildable if we'd use rpm / deb package of it.
     ('aqlprofile', '...')
 ]
-
-# We use non rpath wrapper until we have a proper toolchain.
-# Therefore, ROCm rpath test fails expectedly
-check_readelf_rpath = False
-
-configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/clang'
-configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/clang++'
 
 sanity_check_paths = {
     '...'

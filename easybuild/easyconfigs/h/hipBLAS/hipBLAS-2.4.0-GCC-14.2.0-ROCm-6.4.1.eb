@@ -1,4 +1,4 @@
-easyblock = 'CMakeMake'
+easyblock = 'EB_ROCmComponent'
 
 name = 'hipBLAS'
 version = '3.3.0'
@@ -36,19 +36,9 @@ dependencies = [
     ('hipBLAS-common', '1.2.0', f'-ROCm-{_rocm_version}')
 ]
 
-# We use non rpath wrapper until we have a proper toolchain.
-# Therefore, ROCm rpath test fails expectedly
-check_readelf_rpath = False
-
-configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang '
-configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
-configopts += ' -DCMAKE_HIP_COMPILER=$EBROOTHIP/bin/hipcc '
-# Build options as specified in AMD build scripts and TheRock monobuild repo
-configopts += '-DHIP_PLATFORM=amd -DHIP_DIR=$EBROOTHIP '
-# TODO: Replace with build option provided by Framework PR: EasyBlock?
-configopts += '-DAMDGPU_TARGETS=%(amdgcn_cc_semicolon_sep)s '
+configopts = '-DHIP_DIR=$EBROOTHIP '
 # Disable building external components
-configopts += "-DBUILD_GTEST=OFF -DBUILD_LAPACK=OFF "
+configopts += '-DBUILD_GTEST=OFF -DBUILD_LAPACK=OFF '
 
 # TODO: Patch CMake to correctly use our libraries instead of checking /opt/rocm first.
 

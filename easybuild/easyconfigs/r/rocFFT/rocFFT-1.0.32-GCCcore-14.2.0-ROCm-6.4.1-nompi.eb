@@ -1,4 +1,4 @@
-easyblock = 'CMakeMake'
+easyblock = 'EB_ROCmComponent'
 
 name = 'rocFFT'
 version = '1.7.0'
@@ -30,17 +30,7 @@ dependencies = [
     ('SQLite', '3.47.2'),
 ]
 
-# We use non rpath wrapper until we have a proper toolchain.
-# Therefore, ROCm rpath test fails expectedly
-check_readelf_rpath = False
-
-configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang '
-configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
-# Build options as specified in AMD build scripts and TheRock monobuild repo
-configopts += '-DHIP_PLATFORM=amd '
-configopts += '-DGPU_TARGETS=%(amdgcn_cc_semicolon_sep)s '
-configopts += '-DSQLITE_USE_SYSTEM_PACKAGE=ON '
-
+configopts = '-DSQLITE_USE_SYSTEM_PACKAGE=ON '
 
 sanity_check_paths = {
     'files': ['include/rocfft/rocfft.h',

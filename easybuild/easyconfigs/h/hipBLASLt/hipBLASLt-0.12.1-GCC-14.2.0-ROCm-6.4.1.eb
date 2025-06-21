@@ -1,4 +1,4 @@
-easyblock = 'CMakeMake'
+easyblock = 'EB_ROCmComponent'
 
 name = 'hipBLASLt'
 version = '0.12.1'
@@ -47,16 +47,8 @@ dependencies = [
     ('rocTracer', f'{_rocm_version}'),
 ]
 
-# We use non rpath wrapper until we have a proper toolchain.
-# Therefore, ROCm rpath test fails expectedly
-check_readelf_rpath = False
-
-configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang '
-configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/amdclang++ '
 # Build options as specified in AMD build scripts and TheRock monobuild repo
-configopts += '-DHIPBLASLT_ENABLE_BLIS=OFF '
-# TODO: Replace with build option provided by Framework PR: EasyBlock?
-configopts += '-DAMDGPU_TARGETS=%(amdgcn_cc_semicolon_sep)s '
+configopts = '-DHIPBLASLT_ENABLE_BLIS=OFF '
 # rocRoller has no release yet, and is not supported for RHEL < 9.5.
 # Therefore, disable to to be safe.
 configopts += '-DHIPBLASLT_USE_ROCROLLER=OFF '

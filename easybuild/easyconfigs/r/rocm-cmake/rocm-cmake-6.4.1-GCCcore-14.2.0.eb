@@ -1,4 +1,4 @@
-easyblock = 'CMakeMake'
+easyblock = 'EB_ROCmComponent'
 
 name = 'rocm-cmake'
 version = '6.4.1'
@@ -22,10 +22,7 @@ builddependencies = [
 dependencies = [
     ('ROCm-LLVM', '%(version)s'),
 ]
-
-configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/clang'
-configopts += ' -DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/clang++'
-configopts += ' -DLLVM_INSTALL_PREFIX=$EBROOTROCMMINLLVM'
+configopts = ' -DLLVM_INSTALL_PREFIX=$EBROOTROCMMINLLVM'
 configopts += ' -DLLVM_DIR=$EBROOTROCMMINLLVM'
 
 sanity_check_paths = {

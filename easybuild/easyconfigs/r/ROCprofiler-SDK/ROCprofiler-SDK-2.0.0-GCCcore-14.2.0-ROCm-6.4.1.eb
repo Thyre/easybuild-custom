@@ -1,4 +1,4 @@
-easyblock = 'CMakeMake'
+easyblock = 'EB_ROCmComponent'
 
 name = 'ROCprofiler-SDK'
 version = '2.0.0'
@@ -35,12 +35,6 @@ dependencies = [
     ('aqlprofile', '...')
 ]
 
-# We use non rpath wrapper until we have a proper toolchain.
-# Therefore, ROCm rpath test fails expectedly
-check_readelf_rpath = False
-
-configopts = '-DCMAKE_C_COMPILER=$EBROOTROCMMINLLVM/bin/clang '
-configopts += '-DCMAKE_CXX_COMPILER=$EBROOTROCMMINLLVM/bin/clang++ '
 # Disable all the external component builds
 configopts += '-DROCPROFILER_BUILD_GHC_FS=OFF '
 configopts += '-DROCPROFILER_BUILD_GTEST=OFF '
