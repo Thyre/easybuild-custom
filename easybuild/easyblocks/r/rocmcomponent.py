@@ -76,8 +76,8 @@ class EB_ROCmComponent(CMakeMake):
         if self.cfg['use_rocm_llvm_to_build']:
             if build_option('rpath'):
                 tmp_toolchain = Clang(name='Clang', version='1')
-                Clang.COMPILER_CC = 'amdclang'
-                Clang.COMPILER_CXX = 'amdclang++'
+                tmp_toolchain.COMPILER_CC = 'amdclang'
+                tmp_toolchain.COMPILER_CXX = 'amdclang++'
                 tmp_toolchain.prepare_rpath_wrappers()
 
                 cflags = os.getenv('CFLAGS', '')
