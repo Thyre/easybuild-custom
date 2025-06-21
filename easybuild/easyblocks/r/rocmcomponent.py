@@ -97,3 +97,4 @@ class EB_ROCmComponent(CMakeMake):
             # For now, pass both AMDGPU_TARGETS and GPU_TARGETS, until AMD finally drops the former for all packages.
             self.cfg['configopts'] += f' -DAMDGPU_TARGETS={list_to_cmake_arg(amd_gfx_list)} '
             self.cfg['configopts'] += f' -DGPU_TARGETS={list_to_cmake_arg(amd_gfx_list)} '
+        super().configure_step(srcdir, builddir)
