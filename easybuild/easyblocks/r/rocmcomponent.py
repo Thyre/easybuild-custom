@@ -57,6 +57,7 @@ class EB_ROCmComponent(CMakeMake):
             'use_rocm_llvm_to_build': [True, "Use ROCm-LLVM to build package, uses toolchain compiler otherwise", CUSTOM],
             'hip_platform': ['amd', "Specify HIP platform. Allowed values: amd, nvidia", CUSTOM],
         })
+        return extra_vars
 
     def configure_step(self, srcdir=None, builddir=None):
         """Prepare configuration to properly build ROCm component."""
