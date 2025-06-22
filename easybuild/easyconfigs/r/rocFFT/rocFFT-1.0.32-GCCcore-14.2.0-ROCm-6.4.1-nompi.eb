@@ -22,11 +22,12 @@ builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
     ('Python', '3.13.1'),
+    ('hipRAND', '2.13.0', f'-ROCm-{_rocm_version}'),
 ]
+
 dependencies = [
     ('ROCm-LLVM', f'{_rocm_version}'),
     ('HIP', f'{_rocm_version}', '-amd'),
-    ('hipRAND', '2.13.0', f'-ROCm-{_rocm_version}'),
     ('SQLite', '3.47.2'),
 ]
 

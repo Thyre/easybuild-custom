@@ -20,16 +20,13 @@ checksums = ['517950ff6b3715dee8b2bcfbdd3968c65e1910e4b8e353e148574ae08aa6dc73']
 builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
+    ('Python', '3.13.1'),
+    ('Tensile', '4.43.0'),
+    ('ROCm-LLVM', f'{_rocm_version}'),
 ]
 dependencies = [
-    ('Python', '3.13.1'),
-    ('ROCm-LLVM', f'{_rocm_version}'),
     ('HIP', f'{_rocm_version}', '-amd'),
     ('rocTracer', f'{_rocm_version}'),
-    ('Tensile', '4.43.0'),
-    ('glog', '0.7.1'),
-    ('fmt', '11.2.0'),
-    ('rocprofiler-register', f'{_rocm_version}'),
     ('hipBLASLt', '0.12.1', f'-ROCm-{_rocm_version}'),
 ]
 

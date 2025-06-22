@@ -27,17 +27,15 @@ checksums = [
 builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
+    ('ROCm-LLVM', f'{_rocm_version}'),
 ]
 
 dependencies = [
-    ('ROCm-LLVM', f'{_rocm_version}'),
     ('HIP', f'{_rocm_version}', '-amd'),
     ('rocBLAS', '4.4.0', f'-ROCm-{_rocm_version}'),
     ('rocPRIM', '3.4.0', f'-ROCm-{_rocm_version}'),
+    # TODO: Not found during CMake run
     ('rocSPARSE', '3.4.0', f'-ROCm-{_rocm_version}'),
-    ('glog', '0.7.1'),
-    ('fmt', '11.2.0'),
-    ('rocprofiler-register', f'{_rocm_version}'),
 ]
 
 sanity_check_paths = {

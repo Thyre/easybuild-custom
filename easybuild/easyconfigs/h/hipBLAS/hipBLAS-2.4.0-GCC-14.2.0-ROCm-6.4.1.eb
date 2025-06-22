@@ -24,23 +24,21 @@ checksums = ['3fa0a690bf96104afb093d19a4f565012a59ab6df378df8aef5420914e82d91b']
 builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
+    ('Python', '3.13.1'),
+    ('PyYAML', '6.0.2'),
+    ('ROCm-LLVM', f'{_rocm_version}'),
 ]
 dependencies = [
-    ('ROCm-LLVM', f'{_rocm_version}'),
     ('HIP', f'{_rocm_version}', '-amd'),
     ('rocBLAS', '4.4.0', f'-ROCm-{_rocm_version}'),
     ('rocSPARSE', '3.4.0', f'-ROCm-{_rocm_version}'),
     ('rocSOLVER', '3.28.0', f'-ROCm-{_rocm_version}'),
-    ('Python', '3.13.1'),
-    ('PyYAML', '6.0.2'),
     ('hipBLAS-common', '1.2.0', f'-ROCm-{_rocm_version}')
 ]
 
 configopts = '-DHIP_DIR=$EBROOTHIP '
 # Disable building external components
 configopts += '-DBUILD_GTEST=OFF -DBUILD_LAPACK=OFF '
-
-# TODO: Patch CMake to correctly use our libraries instead of checking /opt/rocm first.
 
 sanity_check_paths = {
     'files': ['lib/cmake/hipblas/hipblas-config.cmake',

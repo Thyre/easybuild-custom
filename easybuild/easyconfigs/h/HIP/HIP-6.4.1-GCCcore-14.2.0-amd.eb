@@ -20,16 +20,10 @@ builddependencies = [
 ]
 
 dependencies = [
-    ('zlib', '1.3.1'),
-    ('libxml2', '2.13.4'),
+    ('rocm-cmake', '%(version)s'),
     ('numactl', '2.0.19'),
     ('Perl', '5.40.0'),
-    ('libglvnd', '1.7.0'),
-    ('gflags', '2.2.2'),
-    ('glog', '0.7.1'),
-    ('fmt', '11.2.0'),
     ('ROCm-LLVM', '%(version)s'),
-    ('rocm-cmake', '%(version)s'),
     ('rocminfo', '%(version)s'),
     ('rocprofiler-register', '%(version)s'),
 ]
@@ -92,7 +86,7 @@ sanity_check_commands = [
 ]
 
 modextravars = {
-    'HIP_COMPILER': 'clang',
+    'HIP_COMPILER': 'amdclang',
     'HIP_INCLUDE_PATH': '%(installdir)s/include',
     'HIP_LIB_PATH': '%(installdir)s/lib',
     'HIP_PATH': '%(installdir)s',

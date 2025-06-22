@@ -22,15 +22,12 @@ checksums = ['f44db33179d5f8e18f948ff3ac8bd9b59f7bfdd67c66a7972ef1ee0eb15872de']
 builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
+    ('ROCm-LLVM', f'{_rocm_version}'),
 ]
 dependencies = [
-    ('ROCm-LLVM', f'{_rocm_version}'),
     ('HIP', f'{_rocm_version}', '-amd'),
     ('rocBLAS', '4.4.0', f'-ROCm-{_rocm_version}'),
     ('rocPRIM', '3.4.0', f'-ROCm-{_rocm_version}'),
-    ('rocTracer', '6.4.1'),
-    ('glog', '0.7.1'),
-    ('rocprofiler-register', f'{_rocm_version}'),
 ]
 
 sanity_check_paths = {

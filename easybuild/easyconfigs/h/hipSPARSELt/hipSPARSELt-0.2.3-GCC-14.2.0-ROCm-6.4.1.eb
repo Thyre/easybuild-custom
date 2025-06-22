@@ -26,10 +26,10 @@ builddependencies = [
     ('CMake', '3.31.3'),
     ('Python', '3.13.1'),
     ('rocm-cmake', '6.4.1'),
+    ('ROCm-LLVM', '6.4.1'),
 ]
 
 dependencies = [
-    ('ROCm-LLVM', '6.4.1'),
     ('HIP', '6.4.1', '-amd'),
     ('rocSPARSE', '3.4.0', f'-ROCm-{_rocm_version}')
 ]

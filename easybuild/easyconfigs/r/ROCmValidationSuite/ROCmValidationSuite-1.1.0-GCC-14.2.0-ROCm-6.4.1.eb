@@ -35,6 +35,7 @@ builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
     ('Doxygen', '1.14.0'),
+    ('yaml-cpp', '0.8.0'),
 ]
 dependencies = [
     ('Python', '3.13.1'),
@@ -46,7 +47,6 @@ dependencies = [
     ('rocRAND', '3.3.0', f'-ROCm-{_rocm_version}'),
     ('hipBLAS-common', '1.2.0', f'-ROCm-{_rocm_version}'),
     ('hipRAND', '2.13.0', f'-ROCm-{_rocm_version}'),
-    ('yaml-cpp', '0.8.0'),
 ]
 
 # TODO: Option may be hard-coded. Remove this option from the CMakeLists.txt and provide our own list here.

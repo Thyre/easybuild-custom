@@ -20,9 +20,9 @@ checksums = ['93a213a37142ae38518b6d912b89dc0ecb50e092ce84df4cb06447f1528fcc29']
 builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
+    ('ROCm-LLVM', f'{_rocm_version}'),
 ]
 dependencies = [
-    ('ROCm-LLVM', f'{_rocm_version}'),
     ('HIP', f'{_rocm_version}', '-amd'),
     ('rocPRIM', '3.4.0', f'-ROCm-{_rocm_version}')
 ]

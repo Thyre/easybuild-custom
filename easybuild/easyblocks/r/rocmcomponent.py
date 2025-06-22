@@ -30,6 +30,7 @@ implemented as an easyblock
 """
 import contextlib
 import os
+import tempfile
 
 from easybuild.framework.easyconfig import CUSTOM
 from easybuild.easyblocks.generic.cmakemake import CMakeMake
@@ -89,13 +90,14 @@ class EB_ROCmComponent(CMakeMake):
             amdclang_mock = which('amdclang')
             amdclangxx_mock = which('amdclang++')
 
-            self.cfg['configopts'] += f' -DCMAKE_C_COMPILER={amdclang_mock} ' \
-                                      f' -DCMAKE_CXX_COMPILER={amdclangxx_mock} '
+            self.cfg['configopts'] += f'-DCMAKE_C_COMPILER={amdclang_mock} '
+            self.cfg['configopts'] += f'-DCMAKE_CXX_COMPILER={amdclangxx_mock} '
+            self.cfg['configopts'] += f'-DCMAKE_HIP_COMPILER={amdclangxx_mock} '
 
-        self.cfg['configopts'] += f' -DHIP_PLATFORM={self.cfg['hip_platform']}'
+        self.cfg['configopts'] += f'-DHIP_PLATFORM={self.cfg["hip_platform"]} '
         amd_gfx_list = build_option('amdgcn_capabilities') or self.cfg['amdgcn_capabilities'] or []
         if amd_gfx_list and self.cfg['hip_platform'] == 'amd':
             # For now, pass both AMDGPU_TARGETS and GPU_TARGETS, until AMD finally drops the former for all packages.
-            self.cfg['configopts'] += f' -DAMDGPU_TARGETS={list_to_cmake_arg(amd_gfx_list)} '
-            self.cfg['configopts'] += f' -DGPU_TARGETS={list_to_cmake_arg(amd_gfx_list)} '
+            self.cfg['configopts'] += f'-DAMDGPU_TARGETS={list_to_cmake_arg(amd_gfx_list)} '
+            self.cfg['configopts'] += f'-DGPU_TARGETS={list_to_cmake_arg(amd_gfx_list)} '
         super().configure_step(srcdir, builddir)

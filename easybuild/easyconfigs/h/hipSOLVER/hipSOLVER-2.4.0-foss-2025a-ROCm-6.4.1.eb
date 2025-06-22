@@ -29,10 +29,10 @@ builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
     ('rocm-cmake', '6.4.1'),
+    ('ROCm-LLVM', '6.4.1'),
 ]
 
 dependencies = [
-    ('ROCm-LLVM', '6.4.1'),
     ('HIP', '6.4.1', '-amd'),
     ('rocBLAS', '4.4.0', f'-ROCm-{_rocm_version}'),
     ('rocSOLVER', '3.28.0', f'-ROCm-{_rocm_version}'),

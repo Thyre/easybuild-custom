@@ -24,13 +24,13 @@ checksums = ['888e9794adff06ca1be811d80018e761b9a9cf84cb88dec9e51bc3a6db7a359a']
 builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
-    ('googletest', '1.17.0'),
-    ('rocm_smi_lib', '7.6.0', f'-ROCm-{_rocm_version}'), # Required for tests
 ]
 dependencies = [
     ('ROCm-LLVM', f'{_rocm_version}'),
     ('HIP', f'{_rocm_version}', '-amd'),
     ('rocBLAS', '4.4.0', f'-ROCm-{_rocm_version}'),
+    ('googletest', '1.17.0'),
+    ('rocm_smi_lib', '7.6.0', f'-ROCm-{_rocm_version}'),
 ]
 
 configopts = '-DROCWMMA_USE_SYSTEM_GOOGLETEST=ON '

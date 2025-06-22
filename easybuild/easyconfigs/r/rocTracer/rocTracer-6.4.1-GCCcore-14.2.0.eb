@@ -21,12 +21,10 @@ builddependencies = [
     ('CppHeaderParser', '2.7.4'),
     ('Doxygen', '1.14.0'),
     ('Python', '3.13.1'),
+    ('ROCm-LLVM', '%(version)s'),
 ]
 dependencies = [
-    ('ROCm-LLVM', '%(version)s'),
     ('HIP', '%(version)s', '-amd'),
-    ('glog', '0.7.1'),
-    ('rocprofiler-register', '%(version)s'),
 ]
 
 sanity_check_paths = {

@@ -32,7 +32,7 @@ dependencies = [
     ('rocRAND', '3.3.0', f'-ROCm-{_rocm_version}'),
 ]
 
-configopts = '-DSUPPORT_HIP=ON -DSUPPORT_OMP=ON -DSUPPORT_MPI=OFF '
+configopts = '-DUSE_HIPCXX=ON -DSUPPORT_OMP=ON -DSUPPORT_MPI=OFF -DCMAKE_MODULE_PATH=$EBROOTHIP/lib/cmake/hip '
 
 sanity_check_paths = {
     'files': ['include/rocalution/rocalution.hpp',

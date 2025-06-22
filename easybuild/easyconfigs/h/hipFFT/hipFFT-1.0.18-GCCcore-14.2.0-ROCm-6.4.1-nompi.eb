@@ -24,10 +24,10 @@ builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
     ('rocm-cmake', '6.4.1'),
+    ('ROCm-LLVM', '6.4.1'),
 ]
 
 dependencies = [
-    ('ROCm-LLVM', '6.4.1'),
     ('hipRAND', '2.13.0', f'-ROCm-{_rocm_version}'),
     ('rocFFT', '1.0.32', f'-ROCm-{_rocm_version}-nompi'),
 ]

@@ -25,11 +25,11 @@ builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
     ('Python', '3.13.1'),
+    ('HIPIFY', '6.4.1'),
+    ('ROCm-LLVM', f'{_rocm_version}'),
 ]
 dependencies = [
-    ('ROCm-LLVM', f'{_rocm_version}'),
     ('HIP', f'{_rocm_version}', '-amd'),
-    ('HIPIFY', '6.4.1'),
     ('rocTracer', '6.4.1'),
     ('rocm_smi_lib', '7.6.0', f'-ROCm-{_rocm_version}'),
     ('rocprofiler-register', '6.4.1'),

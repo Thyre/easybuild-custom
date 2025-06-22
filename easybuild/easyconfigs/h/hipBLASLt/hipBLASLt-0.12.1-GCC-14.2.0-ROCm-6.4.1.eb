@@ -38,12 +38,12 @@ builddependencies = [
     ('CMake', '3.31.3'),
     ('git', '2.49.0'),
     ('msgpack-cxx', '7.0.0'),
-    ('hipBLAS-common', '1.2.0', f'-ROCm-{_rocm_version}')
-]
-dependencies = [
     ('Python', '3.13.1'),
     ('ROCm-LLVM', f'{_rocm_version}'),
+]
+dependencies = [
     ('HIP', f'{_rocm_version}', '-amd'),
+    ('hipBLAS-common', '1.2.0', f'-ROCm-{_rocm_version}'),
     ('rocTracer', f'{_rocm_version}'),
 ]
 
