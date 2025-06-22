@@ -1,0 +1,44 @@
+easyblock = 'EB_ROCmComponent'
+
+name = 'hipSPARSE'
+version = '3.2.0'
+_rocm_version = '6.4.1'
+versionsuffix = f'-ROCm-{_rocm_version}'
+
+homepage = 'https://github.com/ROCm/hipSPARSE'
+description = """hipSPARSE is a SPARSE marshalling library with multiple supported backends. It sits between
+your application and a 'worker' SPARSE library, where it marshals inputs to the backend library and marshals
+results to your application. hipSPARSE exports an interface that doesn't require the client to change,
+regardless of the chosen backend. Currently, hipSPARSE supports rocSPARSE and NVIDIA CUDA cuSPARSE backends."""
+docurls = ['https://rocm.docs.amd.com/projects/hipSPARSE/en/latest/']
+
+toolchain = {'name': 'GCC', 'version': '14.2.0'}
+toolchainopts = {'pic': True}
+
+github_account = 'ROCm'
+source_urls = [GITHUB_SOURCE]
+sources = [f'rocm-{_rocm_version}.tar.gz']
+checksums = ['cae547776076066c0ee19a7f98516ac2e9a0cf3bb3b0809d7a4e474f9ee4cb90']
+
+builddependencies = [
+    ('binutils', '2.42'),
+    ('CMake', '3.31.3'),
+    ('Python', '3.13.1'),
+    ('rocm-cmake', '6.4.1'),
+]
+
+dependencies = [
+    ('ROCm-LLVM', '6.4.1'),
+    ('HIP', '6.4.1', '-amd'),
+    ('rocSPARSE', '3.4.0', f'-ROCm-{_rocm_version}')
+]
+
+sanity_check_paths = {
+    'files': ['include/hipsparse/hipsparse.h',
+              f'lib/libhipsparse.{SHLIB_EXT}',
+              'lib/cmake/hipsparse/hipsparse-config.cmake'],
+    'dirs': ['share/doc/hipsparse',
+             'include/hipsparse'],
+}
+
+moduleclass = 'lib'
