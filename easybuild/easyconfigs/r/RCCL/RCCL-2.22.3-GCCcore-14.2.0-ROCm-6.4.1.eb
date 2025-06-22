@@ -1,0 +1,46 @@
+easyblock = 'EB_ROCmComponent'
+
+name = 'RCCL'
+version = '2.22.3'
+_rocm_version = '6.4.1'
+versionsuffix = f'-ROCm-{_rocm_version}'
+
+homepage = 'https://github.com/ROCm/RCCL'
+description = """RCCL (pronounced "Rickle") is a stand-alone library of standard collective communication
+routines for GPUs, implementing all-reduce, all-gather, reduce, broadcast, reduce-scatter, gather, scatter,
+and all-to-all. There is also initial support for direct GPU-to-GPU send and receive operations. It has been
+optimized to achieve high bandwidth on platforms using PCIe, xGMI as well as networking using InfiniBand Verbs
+or TCP/IP sockets. RCCL supports an arbitrary number of GPUs installed in a single node or multiple nodes, and
+can be used in either single- or multi-process (e.g., MPI) applications."""
+docurls = ['https://rocm.docs.amd.com/projects/RCCL/en/latest/']
+
+toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
+
+github_account = 'ROCm'
+source_urls = [GITHUB_SOURCE]
+sources = [f'rocm-{_rocm_version}.tar.gz']
+checksums = ['82b7e79e1bc3a1b16214a8758ed90d8cbf7f25f524169a85f64d070cf26742e9']
+
+builddependencies = [
+    ('binutils', '2.42'),
+    ('CMake', '3.31.3'),
+    ('Python', '3.13.1'),
+]
+dependencies = [
+    ('ROCm-LLVM', f'{_rocm_version}'),
+    ('HIP', f'{_rocm_version}', '-amd'),
+    ('HIPIFY', '6.4.1'),
+    ('rocTracer', '6.4.1'),
+    ('rocm_smi_lib', '7.6.0', f'-ROCm-{_rocm_version}'),
+    ('rocprofiler-register', '6.4.1'),
+]
+
+sanity_check_paths = {
+    'files': ['include/rccl/rccl.h',
+              f'lib/librccl.{SHLIB_EXT}',
+              'lib/cmake/rccl/rccl-config.cmake'],
+    'dirs': ['share/doc/rccl',
+             'include/rccl'],
+}
+
+moduleclass = 'lib'
