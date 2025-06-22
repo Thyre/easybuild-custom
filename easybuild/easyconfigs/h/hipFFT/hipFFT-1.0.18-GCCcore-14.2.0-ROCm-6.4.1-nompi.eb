@@ -1,0 +1,43 @@
+easyblock = 'EB_ROCmComponent'
+
+name = 'hipFFT'
+version = '1.0.18'
+_rocm_version = '6.4.1'
+versionsuffix = f'-ROCm-{_rocm_version}-nompi'
+
+homepage = 'https://github.com/ROCm/hipFFT'
+description = """hipFFT is an FFT marshalling library that supports rocFFT and cuFFT backends.
+
+hipFFT exports an interface that doesn't require the client to change, regardless of the chosen
+backend. It sits between your application and the backend FFT library, where it marshals inputs
+to the backend and marshals results back to your application."""
+docurls = ['https://rocm.docs.amd.com/projects/hipFFT/en/latest/']
+
+toolchain = {'name': 'GCC', 'version': '14.2.0'}
+
+github_account = 'ROCm'
+source_urls = [GITHUB_SOURCE]
+sources = [f'rocm-{_rocm_version}.tar.gz']
+checksums = ['4f29b1d5cfb31bcc7fe9357b1d0e323fff9064fd0ee503fd116665c6dc24e8a4']
+
+builddependencies = [
+    ('binutils', '2.42'),
+    ('CMake', '3.31.3'),
+    ('rocm-cmake', '6.4.1'),
+]
+
+dependencies = [
+    ('ROCm-LLVM', '6.4.1'),
+    ('hipRAND', '2.13.0', f'-ROCm-{_rocm_version}'),
+    ('rocFFT', '1.0.32', f'-ROCm-{_rocm_version}-nompi'),
+]
+
+sanity_check_paths = {
+    'files': ['include/hipfft/hipfft.h',
+              f'lib/libhipfft.{SHLIB_EXT}',
+              'lib/cmake/hipfft/hipfft-config.cmake'],
+    'dirs': ['share/doc/hipfft',
+             'include/hipfft'],
+}
+
+moduleclass = 'lib'
