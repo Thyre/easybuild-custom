@@ -24,7 +24,7 @@ builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
     ('Python', '3.13.1'),
-    ('rocm-cmake', '6.4.1'),
+    ('rocm-cmake', '0.14.0', f'-ROCm-{_rocm_version}'),
     ('ROCm-LLVM', '6.4.1'),
 ]
 

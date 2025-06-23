@@ -1,7 +1,9 @@
 easyblock = 'EB_ROCmComponent'
 
 name = 'rocTracer'
-version = '6.4.1'
+version = '4.1.0'
+_rocm_version = '6.4.1'
+versionsuffix = f'-ROCm-{_rocm_version}'
 
 homepage = 'https://github.com/ROCm/roctracer'
 description = """ROCM cmake modules provides cmake modules for common build

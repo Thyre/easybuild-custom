@@ -1,8 +1,9 @@
 easyblock = 'EB_ROCmComponent'
 
 name = 'HIPIFY'
+version = '19.0.0'
 _rocm_version = '6.4.1'
-version = f'{_rocm_version}'
+versionsuffix = f'-ROCm-{_rocm_version}'
 
 homepage = 'https://github.com/ROCm/HIPIFY'
 description = """HIPIFY is a set of tools that you can use to automatically

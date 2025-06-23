@@ -1,7 +1,9 @@
 easyblock = 'CMakeMake'
 
 name = 'rocminfo'
-version = '6.4.1'
+version = '1.0.0'
+_rocm_version = '6.4.1'
+versionsuffix = f'-ROCm-{_rocm_version}'
 
 homepage = 'https://github.com/RadeonOpenCompute/rocminfo'
 description = """ROCm Application for Reporting System Info"""

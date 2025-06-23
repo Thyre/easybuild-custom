@@ -29,7 +29,7 @@ dependencies = [
     ('HIP', f'{_rocm_version}', '-amd'),
     ('glog', '0.7.1'),
     ('numactl', '2.0.19'),
-    ('rocTracer', '6.4.1'),
+    ('rocTracer', '4.1.0', f'-ROCm-{_rocm_version}'),
     # ROCProfiler requires `aqlprofile`, which was open-sourced just two weeks ago
     # and has no release yet. Therefore, only buildable if we'd use rpm / deb package of it.
     ('aqlprofile', '...')

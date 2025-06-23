@@ -30,9 +30,9 @@ builddependencies = [
 ]
 dependencies = [
     ('HIP', f'{_rocm_version}', '-amd'),
-    ('rocTracer', '6.4.1'),
+    ('rocTracer', '4.1.0', f'-ROCm-{_rocm_version}'),
     ('rocm_smi_lib', '7.6.0', f'-ROCm-{_rocm_version}'),
-    ('rocprofiler-register', '6.4.1'),
+    ('rocprofiler-register', '0.4.0', f'-ROCm-{_rocm_version}'),
 ]
 
 sanity_check_paths = {

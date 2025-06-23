@@ -1,8 +1,9 @@
 easyblock = 'CMakeMake'
 
 name = 'rocm_bandwidth_test'
+version = '1.4.0'
 _rocm_version = '6.4.1'
-version = _rocm_version
+versionsuffix = f'-ROCm-{_rocm_version}'
 
 homepage = 'https://github.com/ROCm/rocm_bandwidth_test'
 description = """ROCm Bandwidth Test is designed to capture the performance characteristics

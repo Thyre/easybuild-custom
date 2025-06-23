@@ -1,9 +1,11 @@
 easyblock = 'CMakeMake'
 
 name = 'rocprofiler-register'
-version = '6.4.1'
+version = '0.4.0'
+_rocm_version = '6.4.1'
+versionsuffix = f'-ROCm-{_rocm_version}'
 
-homepage = 'https://github.com/RadeonOpenCompute/rocprofiler-register'
+homepage = 'https://github.com/ROCm/rocprofiler-register'
 description = """The rocprofiler-register library is a helper library that coordinates the
 modification of the intercept API table(s) of the HSA/HIP/ROCTx runtime libraries by the
 ROCprofiler (v2) library. The purpose of this library is to provide a consistent and automated
@@ -16,11 +18,11 @@ toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
 github_account = 'ROCm'
 source_urls = [GITHUB_SOURCE]
 sources = ["rocm-%(version)s.tar.gz"]
-patches = ['rocprofiler-register-6.4.1_disable_packaging_external.patch']
+patches = ['rocprofiler-register-0.4.0_disable_packaging_external.patch']
 checksums = [
     # rocm-6.4.1.tar.gz
     'bb8a55d73049f433c039300357713e040ba5b37ed5490336fae435385d09e596',
-    # rocprofiler-register-6.4.1_disable_packaging_external.patch
+    # rocprofiler-register-0.4.0_disable_packaging_external.patch
     '2ef7373721a907ad133a8b21e1a77e3009937b21865d2f49b7362bfbb864695d',
 ]
 
