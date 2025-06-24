@@ -23,6 +23,7 @@ checksums = ['0215b6e6bd851ef4fb758dda9c5fb9c87e59fb79dec0640ba4ef9808c474e209']
 builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
+    ('rocm-cmake', '0.14.0', f'-ROCm-{_rocm_version}'),
 ]
 dependencies = [
     ('ROCm-LLVM', f'{_rocm_version}'),
