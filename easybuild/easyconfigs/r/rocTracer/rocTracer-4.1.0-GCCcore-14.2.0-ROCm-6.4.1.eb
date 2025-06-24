@@ -14,7 +14,7 @@ toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
 
 github_account = 'ROCm'
 source_urls = [GITHUB_SOURCE]
-sources = ['rocm-%(version)s.tar.gz']
+sources = [f'rocm-{_rocm_version}.tar.gz']
 checksums = ['57d61441d95b05b12cd05210a80d81cd1d7a21dab7487680897427dfbdafddca']
 
 builddependencies = [
@@ -23,10 +23,10 @@ builddependencies = [
     ('CppHeaderParser', '2.7.4'),
     ('Doxygen', '1.14.0'),
     ('Python', '3.13.1'),
-    ('ROCm-LLVM', '%(version)s'),
+    ('ROCm-LLVM', f'{_rocm_version}'),
 ]
 dependencies = [
-    ('HIP', '%(version)s', '-amd'),
+    ('HIP', f'{_rocm_version}', '-amd'),
 ]
 
 sanity_check_paths = {
