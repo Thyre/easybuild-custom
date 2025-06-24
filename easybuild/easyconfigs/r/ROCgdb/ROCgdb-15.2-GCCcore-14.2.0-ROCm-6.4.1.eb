@@ -17,8 +17,6 @@ checksums = ['e8f80ed022af7ce9b4f59ebb352d6b2b5af7b6a4179023b24f89215e65bc4527']
 builddependencies = [
     ('binutils', '2.42'),
     ('makeinfo', '7.2'),
-    ('Bison', '3.8.2'),
-    ('flex', '2.6.4'),
 ]
 
 dependencies = [
@@ -44,6 +42,7 @@ configopts += '--enable-tui --enable-plugins --disable-install-libbfd '
 configopts += '--enable-targets="x86_64-pc-linux-gnu,amdgcn-amd-amdhsa" --program-prefix=roc '
 # Disable features where amdgcn target is not being supported
 configopts += '--disable-ld --disable-gas --disable-gdbserver --disable-sim '
+configopts += '--disable-gprofng-tools --disable-gprofng '
 
 sanity_check_paths = {
     'files': ['bin/rocgdb'],
