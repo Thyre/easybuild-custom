@@ -15,7 +15,13 @@ toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
 github_account = 'ROCm'
 source_urls = [GITHUB_SOURCE]
 sources = [f'rocm-{_rocm_version}.tar.gz']
-checksums = ['f22595edb0501bc29aa62263a65333748ebb5a50db80179f6c8e5141697a22ef']
+patches = ['HIPIFY-19.0.0_no-not-hardcode-compiler.patch']
+checksums = [
+    # rocm-6.4.1.tar.gz
+    'f22595edb0501bc29aa62263a65333748ebb5a50db80179f6c8e5141697a22ef',
+    # HIPIFY-19.0.0_no-not-hardcode-compiler.patch
+    '409dde74002d7fdb2e243dd9dda1847660f78ac596103f05796afb6a98af5d04',
+]
 
 builddependencies = [
     ('binutils', '2.42'),
