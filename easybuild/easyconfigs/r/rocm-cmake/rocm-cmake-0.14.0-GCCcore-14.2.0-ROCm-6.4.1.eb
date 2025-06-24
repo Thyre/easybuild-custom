@@ -22,7 +22,7 @@ builddependencies = [
     ('CMake', '3.31.3'),
 ]
 dependencies = [
-    ('ROCm-LLVM', '%(version)s'),
+    ('ROCm-LLVM', f'{_rocm_version}'),
 ]
 configopts = ' -DLLVM_INSTALL_PREFIX=$EBROOTROCMMINLLVM'
 configopts += ' -DLLVM_DIR=$EBROOTROCMMINLLVM'
