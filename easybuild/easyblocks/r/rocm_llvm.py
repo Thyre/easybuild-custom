@@ -86,7 +86,7 @@ class EB_ROCm_minus_LLVM(EB_LLVM):
             self._prepare_runtimes_rpath_wrappers(self.llvm_obj_dir_stage1)
             amdllvm_cmakelists = os.path.join(self.llvm_src_dir, 'clang-tools-extra', 'amdllvm', 'CMakeLists.txt')
             mock_clangxx = which('clang++')
-            apply_regex_substitutions(amdllvm_cmakelists, [(r'set\(CMAKE_CXX_COMPILER ${CMAKE_BINARY_DIR}/bin/clang++\)', 'set(CMAKE_CXX_COMPILER %s)' % mock_clangxx)])
+            apply_regex_substitutions(amdllvm_cmakelists, [(r'set\(CMAKE_CXX_COMPILER ${CMAKE_BINARY_DIR}/bin/clang\+\+\)', 'set(CMAKE_CXX_COMPILER %s)' % mock_clangxx)])
 
     def build_with_prev_stage(self, prev_dir, stage_dir):
         # Similar handling to case above, just for multi-stage build.
@@ -95,7 +95,7 @@ class EB_ROCm_minus_LLVM(EB_LLVM):
             self._prepare_runtimes_rpath_wrappers(stage_dir)
             mock_clangxx = which('clang++')
             amdllvm_cmakelists = os.path.join(self.llvm_src_dir, 'clang-tools-extra', 'amdllvm', 'CMakeLists.txt')
-            apply_regex_substitutions(amdllvm_cmakelists, [(r'set\(CMAKE_CXX_COMPILER ${CMAKE_BINARY_DIR}/bin/clang++\)', 'set(CMAKE_CXX_COMPILER %s)' % mock_clangxx)])
+            apply_regex_substitutions(amdllvm_cmakelists, [(r'set\(CMAKE_CXX_COMPILER ${CMAKE_BINARY_DIR}/bin/clang\+\+\)', 'set(CMAKE_CXX_COMPILER %s)' % mock_clangxx)])
 
         super(EB_ROCm_minus_LLVM, self).build_with_prev_stage(prev_dir, stage_dir)
 
