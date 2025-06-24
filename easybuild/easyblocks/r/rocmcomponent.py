@@ -78,8 +78,8 @@ class EB_ROCmComponent(CMakeMake):
         if self.cfg['use_rocm_llvm_to_build']:
             if build_option('rpath'):
                 tmp_toolchain = Clang(name='Clang', version='1')
-                tmp_toolchain.COMPILER_CC = 'amdclang'
-                tmp_toolchain.COMPILER_CXX = 'amdclang++'
+                tmp_toolchain.COMPILER_CC = 'clang'
+                tmp_toolchain.COMPILER_CXX = 'clang++'
                 tmp_toolchain.prepare_rpath_wrappers()
 
                 cflags = os.getenv('CFLAGS', '')
@@ -87,8 +87,8 @@ class EB_ROCmComponent(CMakeMake):
                 setvar('CFLAGS', "%s %s" % (cflags, '-Wno-unused-command-line-argument'))
                 setvar('CXXFLAGS', "%s %s" % (cxxflags, '-Wno-unused-command-line-argument'))
 
-            amdclang_mock = which('amdclang')
-            amdclangxx_mock = which('amdclang++')
+            amdclang_mock = which('clang')
+            amdclangxx_mock = which('clang++')
 
             self.cfg['configopts'] += f'-DCMAKE_C_COMPILER={amdclang_mock} '
             self.cfg['configopts'] += f'-DCMAKE_CXX_COMPILER={amdclangxx_mock} '
