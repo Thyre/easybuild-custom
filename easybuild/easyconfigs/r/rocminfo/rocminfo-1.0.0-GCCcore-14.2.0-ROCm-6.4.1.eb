@@ -13,7 +13,7 @@ toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
 
 github_account = 'ROCm'
 source_urls = [GITHUB_SOURCE]
-sources = ["rocm-%(version)s.tar.gz"]
+sources = [f"rocm-{_rocm_version}.tar.gz"]
 checksums = ['eabbe4bfb29152900bbde812c6fffd5555b45842259242d85f29e449c00f3249']
 
 builddependencies = [
@@ -22,7 +22,7 @@ builddependencies = [
 ]
 
 dependencies = [
-    ('ROCm-LLVM', '%(version)s'),
+    ('ROCm-LLVM', f'{_rocm_version}'),
     ('Python', '3.13.1'),  # Needed for 'rocm_agent_enumerator' which is a Python script
     ('glog', '0.7.1'),
 ]
