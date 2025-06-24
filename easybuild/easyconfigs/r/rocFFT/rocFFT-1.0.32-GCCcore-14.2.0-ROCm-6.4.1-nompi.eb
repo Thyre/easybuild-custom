@@ -1,7 +1,7 @@
 easyblock = 'EB_ROCmComponent'
 
 name = 'rocFFT'
-version = '1.7.0'
+version = '1.0.32'
 _rocm_version = '6.4.1'
 versionsuffix = f'-ROCm-{_rocm_version}-nompi'
 
