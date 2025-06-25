@@ -57,6 +57,12 @@ dependencies = [
 
 compiler_toolchain = "hipcc"
 
+# Replace runpath with rpath, if rpath is enabled.
+preconfigopts = [
+    "if %(rpath_enabled)s; then "
+    f"  sed -i 's/--enable-new-dtags/--disable-new-dtags/g' %(builddir)s/ROCmValidationSuite-rocm-{_rocm_version}/CMakeLists.txt; "
+    "fi && "
+]
 # TODO: Option may be hard-coded. Remove this option from the CMakeLists.txt and provide our own list here.
 # TODO: Will fail for more than one amdgcn at the same time.
 configopts = '-DHCC_CXX_FLAGS="-fno-gpu-rdc --offload-arch=%(amdgcn_cc_semicolon_sep)s" '
