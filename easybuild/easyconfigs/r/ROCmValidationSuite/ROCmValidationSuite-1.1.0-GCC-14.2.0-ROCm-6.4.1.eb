@@ -47,6 +47,7 @@ dependencies = [
     ('rocRAND', '3.3.0', f'-ROCm-{_rocm_version}'),
     ('hipBLAS-common', '1.2.0', f'-ROCm-{_rocm_version}'),
     ('hipRAND', '2.13.0', f'-ROCm-{_rocm_version}'),
+    ('libpci', '3.14.0'),
 ]
 
 # TODO: Option may be hard-coded. Remove this option from the CMakeLists.txt and provide our own list here.
