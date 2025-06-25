@@ -25,7 +25,7 @@ builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
     ('Python', '3.13.1'),
-    ('HIPIFY', '6.4.1'),
+    ('HIPIFY', '19.0.0', f'-ROCm-{_rocm_version}'),
     ('ROCm-LLVM', f'{_rocm_version}'),
 ]
 dependencies = [
