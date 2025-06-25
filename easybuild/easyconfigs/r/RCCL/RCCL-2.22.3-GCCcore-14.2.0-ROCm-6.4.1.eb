@@ -35,6 +35,8 @@ dependencies = [
     ('rocprofiler-register', '0.4.0', f'-ROCm-{_rocm_version}'),
 ]
 
+configopts = f'-DEXPLICIT_ROCM_VERSION={_rocm_version} '
+
 sanity_check_paths = {
     'files': ['include/rccl/rccl.h',
               f'lib/librccl.{SHLIB_EXT}',
