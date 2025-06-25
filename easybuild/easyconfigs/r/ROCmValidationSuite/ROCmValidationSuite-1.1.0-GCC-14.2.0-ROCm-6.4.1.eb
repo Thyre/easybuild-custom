@@ -26,15 +26,12 @@ source_urls = [GITHUB_SOURCE]
 sources = [f'rocm-{_rocm_version}.tar.gz']
 patches = [
     'ROCmValidationSuite-1.1.0_do-not-hardcode-paths.patch',
-    'ROCmValidationSuite-1.1.0_remove-runpath-setting.patch',
     'ROCmValidationSuite-1.1.0_remove-hardcoded-hipcc.patch',
 ]
 checksums = [
     {'rocm-6.4.1.tar.gz': '2a0ce3e037e2eaee5a29bb796813f94faa9e080af29937583e5ddba7af3c3acb'},
     {'ROCmValidationSuite-1.1.0_do-not-hardcode-paths.patch':
      'bd0108584ff5a1368c8cd3c99c866a5a1171a9e6645ac61ba19957025512d70c'},
-    {'ROCmValidationSuite-1.1.0_remove-runpath-setting.patch':
-     'be1d0832d3217db2196c7950b9823f1d1ad63ef980759cfff86dfa9f6a1bbdb3'},
     {'ROCmValidationSuite-1.1.0_remove-hardcoded-hipcc.patch':
      '114887c474fcb7bda9dcc95124f69a21c4323e4f025a2e20e28cebe4f74a5187'},
 ]
