@@ -50,6 +50,7 @@ class EB_ROCm_minus_LLVM(EB_LLVM):
             'CLANG_DEFAULT_RTLIB': 'compiler-rt',
             'CLANG_DEFAULT_UNWINDLIB': 'libgcc',
             'DEFAULT_ROCM_PATH': self.installdir,
+            'LIBOMP_COPY_EXPORTS': 'OFF',
         })
 
         amd_gfx_list = build_option('amdgcn_capabilities') or self.cfg['amdgcn_capabilities'] or []
@@ -104,6 +105,8 @@ class EB_ROCm_minus_LLVM(EB_LLVM):
         self._cmakeopts.update({
             'LIBOMP_OMPD_SUPPORT': 'ON',
             'CLANG_ENABLE_AMDCLANG': 'ON',
-            'LIBOMPTARGET_FORCE_DLOPEN_LIBHSA': 'ON',
+            # Explicitly disable LIBOMPTARGET_FORCE_DLOPEN_LIBHSA, as this breaks the offload build with OMPT
+            # otherwise.
+            'LIBOMPTARGET_FORCE_DLOPEN_LIBHSA': 'OFF',
         })
         self._configure_general_build()
