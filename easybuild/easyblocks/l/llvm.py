@@ -233,7 +233,6 @@ class EB_LLVM(CMakeMake):
         """Initialize LLVM-specific variables."""
         super().__init__(*args, **kwargs)
 
-        self.llvm_src_dir = None
         self.llvm_obj_dir_stage1 = None
         self.llvm_obj_dir_stage2 = None
         self.llvm_obj_dir_stage3 = None
@@ -308,7 +307,7 @@ class EB_LLVM(CMakeMake):
             self.final_runtimes += ['compiler-rt', 'libunwind', 'libcxx', 'libcxxabi']
 
         if self.cfg['build_openmp']:
-            self.final_projects.append('openmp')
+            self.final_runtimes.append('openmp')
 
         if self.cfg['build_openmp_offload']:
             if not self.cfg['build_openmp']:
@@ -462,6 +461,12 @@ class EB_LLVM(CMakeMake):
         self._cmakeopts = {}
         self._cfgopts = list(filter(None, self.cfg.get('configopts', '').split()))
 
+    @property
+    def llvm_src_dir(self):
+        """Return root source directory of LLVM (containing all components)"""
+        # LLVM is the first source so we already have this in start_dir. Might be changed later
+        return self.start_dir
+
     def prepare_step(self, *args, **kwargs):
         """Prepare step, modified to ensure install dir is deleted before building"""
         super(EB_LLVM, self).prepare_step(*args, **kwargs)
@@ -501,7 +506,7 @@ class EB_LLVM(CMakeMake):
             self._cmakeopts['LIBOMP_USE_HWLOC'] = 'ON'
             self._cmakeopts['LIBOMP_HWLOC_INSTALL_DIR'] = hwloc_root
 
-        if 'openmp' in self.final_projects:
+        if 'openmp' in self.final_runtimes:
             if LooseVersion(self.version) >= LooseVersion('19') and self.cfg['build_openmp_offload']:
                 self.runtimes_cmake_args['LIBOMPTARGET_PLUGINS_TO_BUILD'] = '%s' % '|'.join(self.offload_targets)
             self._cmakeopts['OPENMP_ENABLE_LIBOMPTARGET'] = 'ON'
@@ -676,13 +681,6 @@ class EB_LLVM(CMakeMake):
         # ensure this easyblock can be used as a Bundle component, see
         # https://github.com/easybuilders/easybuild-easyblocks/issues/3680
         general_opts['CMAKE_INSTALL_PREFIX'] = self.installdir
-        start_dir = self.cfg['start_dir']
-        if start_dir:
-            self.llvm_src_dir = os.path.join(self.builddir, start_dir)
-            self.log.debug("Using `%s` as the source dir from start_dir", self.llvm_src_dir)
-        else:
-            self.llvm_src_dir = os.path.join(self.builddir, 'llvm-project-%s.src' % self.version)
-            self.log.debug("Using `%s` as the source dir from easyblock", self.llvm_src_dir)
 
         # Bootstrap
         self.llvm_obj_dir_stage1 = os.path.join(self.builddir, 'llvm.obj.1')
@@ -748,14 +746,14 @@ class EB_LLVM(CMakeMake):
             self.disable_sanitizer_tests()
 
         # Remove python bindings tests causing uncaught exception in the build
-        cmakelists_tests = os.path.join(self.llvm_src_dir, 'clang', 'CMakeLists.txt')
+        cmakelists_tests = os.path.join(self.start_dir, 'clang', 'CMakeLists.txt')
         regex_subs = []
         regex_subs.append((r'add_subdirectory\(bindings/python/tests\)', ''))
         apply_regex_substitutions(cmakelists_tests, regex_subs)
 
         # Remove flags disabling the use of configuration files during compiler-rt tests as we in general rely on them
         # (see https://github.com/easybuilders/easybuild-easyblocks/pull/3741#issuecomment-2939404304)
-        lit_cfg_file = os.path.join(self.llvm_src_dir, 'compiler-rt', 'test', 'lit.common.cfg.py')
+        lit_cfg_file = os.path.join(self.start_dir, 'compiler-rt', 'test', 'lit.common.cfg.py')
         regex_subs = [
             (r'^if config.has_no_default_config_flag:', ''),
             (r'^\s*config.environment\["CLANG_NO_DEFAULT_CONFIG"\] = "1"', '')
@@ -780,7 +778,7 @@ class EB_LLVM(CMakeMake):
         self._configure_general_build()
         self.add_cmake_opts()
 
-        src_dir = os.path.join(self.llvm_src_dir, 'llvm')
+        src_dir = os.path.join(self.start_dir, 'llvm')
         output = super().configure_step(builddir=self.llvm_obj_dir_stage1, srcdir=src_dir)
 
         # Get LLVM_HOST_TRIPLE (e.g. x86_64-unknown-linux-gnu) from the output
@@ -812,7 +810,7 @@ class EB_LLVM(CMakeMake):
 
     def disable_sanitizer_tests(self):
         """Disable the tests of all the sanitizers by removing the test directories from the build system"""
-        cmakelists_tests = os.path.join(self.llvm_src_dir, 'compiler-rt', 'test', 'CMakeLists.txt')
+        cmakelists_tests = os.path.join(self.start_dir, 'compiler-rt', 'test', 'CMakeLists.txt')
         regex_subs = [(r'compiler_rt_test_runtime.*san.*', '')]
         apply_regex_substitutions(cmakelists_tests, regex_subs)
 
@@ -940,7 +938,6 @@ class EB_LLVM(CMakeMake):
 
             # Also runs of the intermediate step compilers should be made aware of the GCC installation
             if LooseVersion(self.version) >= LooseVersion('19'):
-                self._set_gcc_prefix()
                 self._create_compiler_config_file(prev_dir)
                 # also pre-create the CFG files in the `build_stage/bin` directory to enforce using the correct dynamic
                 # linker in case of sysroot builds, and to ensure the correct GCC installation is used also for the
@@ -951,7 +948,7 @@ class EB_LLVM(CMakeMake):
 
             change_dir(stage_dir)
             self.log.debug("Configuring %s", stage_dir)
-            cmd = ' '.join(['cmake', self.cfg['configopts'], os.path.join(self.llvm_src_dir, 'llvm')])
+            cmd = ' '.join(['cmake', self.cfg['configopts'], os.path.join(self.start_dir, 'llvm')])
             run_shell_cmd(cmd)
 
             self.log.debug("Building %s", stage_dir)
@@ -1079,6 +1076,16 @@ class EB_LLVM(CMakeMake):
             gcc_lib = self._get_gcc_libpath(strict=True)
             lib_path = ':'.join(filter(None, [gcc_lib, lib_path]))
 
+        # After switching `openmp` to a runtime build, libomp.so is not produced inside `<builddir>/lib` anymore but
+        # in `<builddir>/runtimes/runtimes-bins/openmp/runtime/src/libomp.so`
+        # This causes the `libomptarget` tests to fail because the compiler cannot find `libomp.so`.
+        check_libomp = os.path.join(basedir, 'runtimes', 'runtimes-bins', 'openmp', 'runtime', 'src', 'libomp.so')
+        needed_libomp = os.path.join(basedir, 'lib', 'libomp.so')
+        if os.path.exists(check_libomp) and not os.path.exists(needed_libomp):
+            # Create a symlink to the libomp.so in the runtimes directory
+            mkdir(os.path.dirname(needed_libomp), parents=True)
+            symlink(check_libomp, needed_libomp)
+
         with _wrap_env(os.path.join(basedir, 'bin'), lib_path):
             cmd = f"make -j {parallel} check-all"
             res = run_shell_cmd(cmd, fail_on_error=False)
@@ -1134,7 +1141,6 @@ class EB_LLVM(CMakeMake):
         if not self.cfg['skip_all_tests']:
             # Also runs of test suite compilers should be made aware of the GCC installation
             if LooseVersion(self.version) >= LooseVersion('19'):
-                self._set_gcc_prefix()
                 self._create_compiler_config_file(self.final_dir)
 
             # For nvptx64 tests, find out if 'ptxas' exists in $PATH. If not, ignore all nvptx64 test failures
@@ -1183,17 +1189,16 @@ class EB_LLVM(CMakeMake):
 
         # copy Python bindings here in post-install step so that it is not done more than once in multi_deps context
         if self.cfg['python_bindings']:
-            python_bindings_source_dir = os.path.join(self.llvm_src_dir, 'clang', 'bindings', 'python')
+            python_bindings_source_dir = os.path.join(self.start_dir, 'clang', 'bindings', 'python')
             python_bindins_target_dir = os.path.join(self.installdir, 'lib', 'python')
             copy_dir(python_bindings_source_dir, python_bindins_target_dir, dirs_exist_ok=True)
 
-            python_bindings_source_dir = os.path.join(self.llvm_src_dir, 'mlir', 'python')
+            python_bindings_source_dir = os.path.join(self.start_dir, 'mlir', 'python')
             copy_dir(python_bindings_source_dir, python_bindins_target_dir, dirs_exist_ok=True)
 
         if LooseVersion(self.version) >= LooseVersion('19'):
             # For GCC aware installation create config files in order to point to the correct GCC installation
             # Required as GCC_INSTALL_PREFIX was removed (see https://github.com/llvm/llvm-project/pull/87360)
-            self._set_gcc_prefix()
             self._create_compiler_config_file(self.installdir)
 
         # This is needed as some older build system will select a different naming scheme for the library leading to
@@ -1415,7 +1420,7 @@ class EB_LLVM(CMakeMake):
             check_bin_files += ['llvm-bolt', 'llvm-boltdiff', 'llvm-bolt-heatmap']
             check_lib_files += ['libbolt_rt_instr.a']
             custom_commands += ['llvm-bolt --help']
-        if 'openmp' in self.final_projects:
+        if 'openmp' in self.final_runtimes:
             omp_lib_files = []
             omp_lib_files += ['libomp.so', 'libompd.so']
             if self.cfg['build_openmp_offload']:
