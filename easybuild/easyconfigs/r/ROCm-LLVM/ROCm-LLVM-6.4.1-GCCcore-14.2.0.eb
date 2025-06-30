@@ -43,6 +43,17 @@ local_common_cmake_configopts = ' '.join([
     '-DLLVM_DIR=%(installdir)s/lib/cmake/llvm',
 ])
 
+checksums = [{
+    'llvm-project-rocm-6.4.1.tar.gz':
+        '460ad28677092b9eb86ffdc49bcb4d01035e32b4f05161d85f90c9fa80239f50',
+    'ROCR-Runtime-rocm-6.4.1.tar.gz':
+        'f72d100a46a2dd9f4c870cef156604777f1bdb1841df039d14bf37b19814b9da',
+    'aomp-extras-rocm-6.4.1.tar.gz':
+        'cf20b02b1f99f506c198866ef03f2265dc355627760f82cda3878d5bc6486afc',
+    'ROCm-LLVM-6.4.1_llvm-project-19.0.0_fix-offload-build.patch':
+        '2ce1454aa3d2f50795bbc331c239f44be07f8ec836978cad130406af4340e30d',
+}]
+
 default_easyblock = 'CMakeMake'
 
 default_component_specs = {
@@ -72,17 +83,9 @@ components = [
         'build_runtimes': True,
         'full_llvm': False,
         'skip_all_tests': True,
-#        'installopts': ' && rm -rf %(builddir)s/llvm.obj.*',
     }),
-    #('AMD-DeviceLibs', 'rocm-%s' % _rocm_version, {
-    #    # sources are located in amd/device-libs subdir of llvm-project component
-    #    'sources': [{'filename': local_rocm_llvm_source, 'extract_cmd': 'echo %s'}],
-    #    'srcdir': 'llvm-project-%s-%%(version)s.src/amd/device-libs' % _llvm_version,
-    #    'configopts': local_common_cmake_configopts,
-    #}),
     ('ROCm-comgr', 'rocm-%s' % _rocm_version, {
         # sources are located in amd/comgr subdir of llvm-project component
-        #'sources': [{'filename': local_rocm_llvm_source, 'extract_cmd': 'echo %s'}],
         'sources': [{'filename': local_rocm_llvm_source, 'extract_cmd': 'echo %s'}],
         'srcdir': 'llvm-project-%s-%%(version)s.src/amd/comgr' % _llvm_version,
         'prebuildopts': 'export ROCM_PATH=%(installdir)s && ',
@@ -99,6 +102,9 @@ components = [
             'filename': local_rocm_llvm_source,
             'extract_cmd': 'echo %s',
         }],
+        'patches': [
+            'ROCm-LLVM-6.4.1_llvm-project-19.0.0_fix-offload-build.patch',
+        ],
         'start_dir': f'llvm-project-{_llvm_version}-rocm-{_rocm_version}.src',
         'bootstrap': True,
         'build_lld': True,
@@ -117,7 +123,6 @@ components = [
 ]
 
 sanity_check_components = ['llvm-project']
-#sanity_check_all_components = True
 
 modextravars = {
     'HIP_DEVICE_LIB_PATH': '%(installdir)s/amdgcn/bitcode',
