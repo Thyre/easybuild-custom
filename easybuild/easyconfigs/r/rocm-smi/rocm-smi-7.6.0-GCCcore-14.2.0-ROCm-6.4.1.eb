@@ -14,8 +14,7 @@ docurls = ['https://rocm.docs.amd.com/projects/rocm_smi_lib/en/latest/']
 
 toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
 
-github_account = 'ROCm'
-source_urls = [GITHUB_SOURCE]
+source_urls = ["https://github.com/ROCm/rocm_smi_lib/archive/"]
 sources = [f'rocm-{_rocm_version}.tar.gz']
 checksums = ['c82c8c9de89537b903d82711c531b4b1c6d104098b5370d049527d1f250944b7']
 
@@ -25,6 +24,10 @@ builddependencies = [
     ('pkgconf', '2.3.0'),
     ('git', '2.49.0'),
     ('libdrm', '2.4.125'),
+]
+
+dependencies = [
+    ('Python', '3.13.1'),
 ]
 
 sanity_check_paths = {
