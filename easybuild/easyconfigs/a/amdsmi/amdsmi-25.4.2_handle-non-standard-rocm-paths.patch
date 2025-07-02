@@ -1,3 +1,9 @@
+Adds an explicit check for esmi_ib_library instead of trying to download it via Git.
+Sources need to be moved in EasyConfig. Also point to EasyBuild paths first before
+trying ROCm default paths.
+
+Author: Jan Andre Reuter (jan@zyten.de)
+
 diff --color -Naur amdsmi-rocm-6.4.1.orig/CMakeLists.txt amdsmi-rocm-6.4.1/CMakeLists.txt
 --- amdsmi-rocm-6.4.1.orig/CMakeLists.txt       2025-05-09 19:06:29.000000000 +0200
 +++ amdsmi-rocm-6.4.1/CMakeLists.txt    2025-06-19 09:57:50.521681766 +0200

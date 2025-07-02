@@ -21,14 +21,14 @@ source_urls = [
 ]
 sources = [
     f'rocm-{_rocm_version}.tar.gz',
-    f'esmi_pkg_ver-4.1.2.tar.gz',
+    'esmi_pkg_ver-4.1.2.tar.gz',
 ]
 patches = ['amdsmi-25.4.2_handle-non-standard-rocm-paths.patch']
 checksums = [
     {'rocm-6.4.1.tar.gz': '5e1030cebacf2c92e63a555db6433ce7bb4f91409910ec98947e459d36630401'},
     {'esmi_pkg_ver-4.1.2.tar.gz': 'd95f12c1500c60dc01b500d8928864a276757bd3bbb4a6daa84fb8c028e2978b'},
     {'amdsmi-25.4.2_handle-non-standard-rocm-paths.patch':
-     '398bfdc6162e98f0b0b77444a6e909fa3d280aadcee673b38802bff5a8b339a6'},
+     '50528f17e78e954d6e5a48b54ca7ead56c962beb45b47e46f871d76aa4e72d3f'},
 ]
 
 builddependencies = [
