@@ -30,7 +30,7 @@ dependencies = [
     ('HIP', f'{_rocm_version}', '-amd'),
     ('rocBLAS', '4.4.0', f'-ROCm-{_rocm_version}'),
     ('googletest', '1.17.0'),
-    ('rocm_smi_lib', '7.6.0', f'-ROCm-{_rocm_version}'),
+    ('rocm-smi', '7.6.0', f'-ROCm-{_rocm_version}'),
 ]
 
 configopts = '-DROCWMMA_USE_SYSTEM_GOOGLETEST=ON '

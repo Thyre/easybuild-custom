@@ -48,7 +48,7 @@ dependencies = [
     ('HIP', f'{_rocm_version}', '-amd'),
     ('rocBLAS', '4.4.0', f'-ROCm-{_rocm_version}'),
     ('hipBLASLt', '0.12.1', f'-ROCm-{_rocm_version}'),
-    ('rocm_smi_lib', '7.6.0', f'-ROCm-{_rocm_version}'),
+    ('rocm-smi', '7.6.0', f'-ROCm-{_rocm_version}'),
     ('rocRAND', '3.3.0', f'-ROCm-{_rocm_version}'),
     ('hipBLAS-common', '1.2.0', f'-ROCm-{_rocm_version}'),
     ('hipRAND', '2.13.0', f'-ROCm-{_rocm_version}'),

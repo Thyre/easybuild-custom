@@ -1,6 +1,6 @@
 easyblock = 'CMakeMake'
 
-name = 'rocm_smi_lib'
+name = 'rocm-smi'
 _rocm_version = '6.4.1'
 version = '7.6.0'
 versionsuffix = f'-ROCm-{_rocm_version}'

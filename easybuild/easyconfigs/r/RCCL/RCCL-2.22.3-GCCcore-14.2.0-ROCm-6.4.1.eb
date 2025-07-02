@@ -31,7 +31,7 @@ builddependencies = [
 dependencies = [
     ('HIP', f'{_rocm_version}', '-amd'),
     ('rocTracer', '4.1.0', f'-ROCm-{_rocm_version}'),
-    ('rocm_smi_lib', '7.6.0', f'-ROCm-{_rocm_version}'),
+    ('rocm-smi', '7.6.0', f'-ROCm-{_rocm_version}'),
     ('rocprofiler-register', '0.4.0', f'-ROCm-{_rocm_version}'),
 ]
 
