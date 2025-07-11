@@ -18,7 +18,7 @@ builddependencies = [
     ('Perl', '5.40.0'),
     ('Python', '3.13.1'),
     ('pkgconf', '2.3.0'),
-    ('xxd', '9.1.1457'), # required for ROCR-Runtime
+    ('xxd', '9.1.1457'),  # required for ROCR-Runtime
 ]
 
 dependencies = [
@@ -32,7 +32,7 @@ dependencies = [
     ('libffi', '3.4.5'),
     ('libdrm', '2.4.125'),
     ('numactl', '2.0.19'),
-#    ('Z3', '4.13.4'),
+    # ('Z3', '4.13.4'),
 ]
 
 local_rocm_llvm_source = 'llvm-project-rocm-%s.tar.gz' % _rocm_version
@@ -70,7 +70,7 @@ components = [
         'easyblock': 'EB_ROCm_minus_LLVM',
         'sources': [{
             'download_filename': 'rocm-%s.tar.gz' % _rocm_version,
-            'filename': local_rocm_llvm_source, #'%(name)s-%(version)s.tar.gz',
+            'filename': local_rocm_llvm_source,  # '%(name)s-%(version)s.tar.gz',
             # rename the extracted directory to the one that the LLVM easyblock expects
             'extract_cmd': 'tar xfz %%s && mv %%(name)s-rocm-%s %%(name)s-%%(version)s.src' % _rocm_version,
         }],
@@ -116,8 +116,10 @@ components = [
         'skip_all_tests': True,
     }),
     ('aomp-extras', 'rocm-%s' % _rocm_version, {
-        'configopts': local_common_cmake_configopts + 
-                      ' -DAOMP_STANDALONE_BUILD=0 -DAOMP_VERSION_STRING=%s ' % _rocm_version
+        'configopts':
+            local_common_cmake_configopts +
+            ' -DAOMP_STANDALONE_BUILD=0 '
+            '-DAOMP_VERSION_STRING=%s ' % _rocm_version
     }),
 
 ]
