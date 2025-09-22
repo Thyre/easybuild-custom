@@ -30,10 +30,11 @@ EasyBuild support for building and installing ROCm-LLVM, AMD's fork of the LLVM 
 @author: Jan Andre Reuter (jan@zyten.de)
 """
 import os
+from tempfile import mkdtemp
 
 from easybuild.tools import LooseVersion
-from easybuild.easyblocks.llvm import EB_LLVM
-from easybuild.tools.filetools import apply_regex_substitutions, remove_dir, which
+from easybuild.easyblocks.llvm import EB_LLVM, BUILD_TARGET_AMDGPU
+from easybuild.tools.filetools import apply_regex_substitutions, remove_dir, which, copy_file
 from easybuild.tools.build_log import EasyBuildError
 from easybuild.tools.config import build_option
 
@@ -42,6 +43,10 @@ class EB_ROCm_minus_LLVM(EB_LLVM):
     """
     Support for building the ROCm-LLVM compilers with some modifications on top of the LLVM easyblock.
     """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Path where the CMakeLists.txt of the 'amdllvm' tool is copied to
+        self.amdllvm_cmakelists_copy_path = None
 
     def _configure_general_build(self):
         super(EB_ROCm_minus_LLVM, self)._configure_general_build()
@@ -53,15 +58,27 @@ class EB_ROCm_minus_LLVM(EB_LLVM):
             'CLANG_DEFAULT_UNWINDLIB': 'libgcc',
             'DEFAULT_ROCM_PATH': self.installdir,
             'LIBOMP_COPY_EXPORTS': 'OFF',
+            'CLANG_ENABLE_AMDCLANG': 'ON',
         })
 
-        amd_gfx_list = build_option('amdgcn_capabilities') or self.cfg['amdgcn_capabilities'] or []
+        amd_gfx_list = build_option('amdgcn_capabilities', default=[])
+        if not amd_gfx_list and 'amdgcn_capabilities' in self.cfg:
+            amd_gfx_list = self.cfg['amdgcn_capabilities']
+        if not amd_gfx_list and 'AMDGCN_CAPABILITIES' in os.environ:
+            amd_gfx_list = os.environ.get('AMDGCN_CAPABILITIES').split(',')
         if not amd_gfx_list:
             raise EasyBuildError("Expected amdgcn_capabilities to be set to build this EasyConfig. "
-                                 "Please specify either --amdgcn_capabilities, or set amdgcn_capabilities "
+                                 "Please specify either --amdgcn-capabilities, or set amdgcn_capabilities "
                                  "in the EasyConfig!")
         if LooseVersion('19') <= LooseVersion(self.version) < LooseVersion('20'):
-            self.runtimes_cmake_args['LIBOMPTARGET_AMDGCN_GFXLIST'] = '%s' % '|'.join(amd_gfx_list)
+            self.general_opts['LIBOMPTARGET_AMDGCN_GFXLIST'] = self.list_to_cmake_arg(amd_gfx_list)
+
+        # If, for some reason, AMDGPU is missing from LLVM_TARGETS_TO_BUILD, ensure that it is added.
+        # If it is missing, the build will fail later on, as the target is expected to exist.
+        if BUILD_TARGET_AMDGPU not in self._cmakeopts['LLVM_TARGETS_TO_BUILD']:
+            if not self._cmakeopts['LLVM_TARGETS_TO_BUILD'][-1] == ";":
+                self._cmakeopts['LLVM_TARGETS_TO_BUILD'] += ";"
+            self._cmakeopts['LLVM_TARGETS_TO_BUILD'] += 'AMDGPU'
 
         intermediate_stage_dir = self.llvm_obj_dir_stage2 if self.cfg['bootstrap'] else self.llvm_obj_dir_stage1
         self.runtimes_cmake_args['AMDDeviceLibs_DIR'] = os.path.join(
@@ -89,9 +106,13 @@ class EB_ROCm_minus_LLVM(EB_LLVM):
         # Therefore, patch hardcoded CMAKE_CXX_COMPILER to use our wrappers, if rpath wrapping is enabled.
         # Do NOT simply unset CMAKE_CXX_COMPILER, or else GCC might be picked up if bootstrap is disabled,
         # conflicting with using `-stdlib=libc++`
-        if build_option('rpath'):
+        if build_option('rpath') and LooseVersion(self.version) < '20':
             self._prepare_runtimes_rpath_wrappers(self.llvm_obj_dir_stage1)
             amdllvm_cmakelists = os.path.join(self.llvm_src_dir, 'clang-tools-extra', 'amdllvm', 'CMakeLists.txt')
+            # Copy the original CMakeLists.txt, so that we can restore it in following stages
+            tmpdir = mkdtemp("amdllvm-cmakelists-txt-store")
+            self.amdllvm_cmakelists_copy_path = f"{tmpdir}/CMakeLists.txt"
+            copy_file(amdllvm_cmakelists, self.amdllvm_cmakelists_copy_path)
             mock_clangxx = which('clang++')
             apply_regex_substitutions(amdllvm_cmakelists,
                                       [(r'set\(CMAKE_CXX_COMPILER ${CMAKE_BINARY_DIR}/bin/clang\+\+\)',
@@ -100,10 +121,12 @@ class EB_ROCm_minus_LLVM(EB_LLVM):
     def build_with_prev_stage(self, prev_dir, stage_dir):
         # Similar handling to case above, just for multi-stage build.
         # Here, we need to create mock wrappers ourselves, as call to LLVM build will start the build process.
-        if build_option('rpath'):
+        if build_option('rpath') and LooseVersion(self.version) < '20':
             self._prepare_runtimes_rpath_wrappers(stage_dir)
             mock_clangxx = which('clang++')
+            # Restore the original file, so that we can replace the Clang with the current stages Clang
             amdllvm_cmakelists = os.path.join(self.llvm_src_dir, 'clang-tools-extra', 'amdllvm', 'CMakeLists.txt')
+            copy_file(self.amdllvm_cmakelists_copy_path, amdllvm_cmakelists)
             apply_regex_substitutions(amdllvm_cmakelists,
                                       [(r'set\(CMAKE_CXX_COMPILER ${CMAKE_BINARY_DIR}/bin/clang\+\+\)',
                                         'set(CMAKE_CXX_COMPILER %s)' % mock_clangxx)])
@@ -114,7 +137,6 @@ class EB_ROCm_minus_LLVM(EB_LLVM):
         super(EB_ROCm_minus_LLVM, self)._configure_final_build()
         self._cmakeopts.update({
             'LIBOMP_OMPD_SUPPORT': 'ON',
-            'CLANG_ENABLE_AMDCLANG': 'ON',
             # Explicitly disable LIBOMPTARGET_FORCE_DLOPEN_LIBHSA, as this breaks the offload build with OMPT
             # otherwise.
             'LIBOMPTARGET_FORCE_DLOPEN_LIBHSA': 'OFF',
