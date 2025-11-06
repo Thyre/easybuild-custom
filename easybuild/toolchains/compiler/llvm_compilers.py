@@ -130,18 +130,18 @@ class LLVMCompilers(Compiler):
         'no_int_conversion_error': ['-Wno-error=int-conversion'],
     }
 
-    COMPILER_OPTIONS = [
-        'lld_undefined_version',
-    ]
+    COMPILER_OPTIONS = Compiler.COMPILER_OPTIONS
+    COMPILER_OPTIONS += ['lld_undefined_version']
 
     # Options only available for Clang compiler
-    COMPILER_C_OPTIONS = [
+    COMPILER_C_UNIQUE_OPTIONS = Compiler.COMPILER_C_UNIQUE_OPTIONS
+    COMPILER_C_UNIQUE_OPTIONS += [
         'no_unused_args',
         'no_int_conversion_error'
     ]
 
     # Options only available for Flang compiler
-    COMPILER_F_OPTIONS = []
+    COMPILER_F_UNIQUE_OPTIONS = Compiler.COMPILER_F_UNIQUE_OPTIONS
 
     # used when 'optarch' toolchain option is enabled (and --optarch is not specified)
     COMPILER_OPTIMAL_ARCHITECTURE_OPTION = {
@@ -159,12 +159,10 @@ class LLVMCompilers(Compiler):
 
     COMPILER_CC = 'clang'
     COMPILER_CXX = 'clang++'
-    COMPILER_C_UNIQUE_OPTIONS = []
 
     COMPILER_F77 = 'flang'
     COMPILER_F90 = 'flang'
     COMPILER_FC = 'flang'
-    COMPILER_F_UNIQUE_OPTIONS = []
 
     LIB_MULTITHREAD = ['pthread']
     LIB_MATH = ['m']
