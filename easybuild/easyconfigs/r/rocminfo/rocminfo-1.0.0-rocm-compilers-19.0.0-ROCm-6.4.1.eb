@@ -3,13 +3,12 @@ easyblock = 'CMakeMake'
 name = 'rocminfo'
 version = '1.0.0'
 _rocm_version = '6.4.1'
-versionsuffix = f'-ROCm-{_rocm_version}'
 
 homepage = 'https://github.com/RadeonOpenCompute/rocminfo'
 description = """ROCm Application for Reporting System Info"""
 docurls = ['https://rocm.docs.amd.com/projects/rocminfo/']
 
-toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
+toolchain = {'name': 'rocm-compilers', 'version': '19.0.0-ROCm-6.4.1'}
 
 github_account = 'ROCm'
 source_urls = [GITHUB_SOURCE]
@@ -22,7 +21,6 @@ builddependencies = [
 ]
 
 dependencies = [
-    ('ROCm-LLVM', f'{_rocm_version}'),
     ('Python', '3.13.1'),  # Needed for 'rocm_agent_enumerator' which is a Python script
     ('glog', '0.7.1'),
 ]

@@ -3,7 +3,6 @@ easyblock = 'Bundle'
 name = 'HIP'
 _rocm_version = '6.4.1'
 version = _rocm_version
-versionsuffix = '-amd'
 
 homepage = 'https://github.com/ROCm/HIP'
 description = """HIP is a C++ Runtime API and Kernel Language that allows
@@ -11,7 +10,7 @@ developers to create portable applications for AMD and NVIDIA GPUs from single
 source code."""
 docurls = ['https://rocmdocs.amd.com/projects/HIP/']
 
-toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
+toolchain = {'name': 'rocm-compilers', 'version': '19.0.0-ROCm-6.4.1'}
 
 builddependencies = [
     ('binutils', '2.42'),
@@ -21,12 +20,10 @@ builddependencies = [
 
 dependencies = [
     ('libglvnd', '1.7.0'),
-    ('rocm-cmake', '0.14.0', f'-ROCm-{_rocm_version}'),
+    ('rocm-cmake', '0.14.0'),
     ('numactl', '2.0.19'),
     ('Perl', '5.40.0'),
-    ('ROCm-LLVM', '%(version)s'),
-    ('rocminfo', '1.0.0', f'-ROCm-{_rocm_version}'),
-    ('rocprofiler-register', '0.4.0', f'-ROCm-{_rocm_version}'),
+    ('rocminfo', '1.0.0'),
 ]
 
 default_easyblock = 'CMakeMake'
