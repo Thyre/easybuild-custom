@@ -1,25 +1,24 @@
-easyblock = 'EB_ROCmComponent'
+easyblock = 'ROCmComponent'
 
 name = 'HIPIFY'
 version = '19.0.0'
 _rocm_version = '6.4.1'
-versionsuffix = f'-ROCm-{_rocm_version}'
 
 homepage = 'https://github.com/ROCm/HIPIFY'
 description = """HIPIFY is a set of tools that you can use to automatically
 translate CUDA source code into portable HIP C++."""
 docurls = ['https://rocm.docs.amd.com/projects/HIPIFY/en/latest/']
 
-toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
+toolchain = {'name': 'rocm-compilers', 'version': '19.0.0-ROCm-6.4.1'}
 
 github_account = 'ROCm'
 source_urls = [GITHUB_SOURCE]
 sources = [f'rocm-{_rocm_version}.tar.gz']
-patches = ['HIPIFY-19.0.0_no-not-hardcode-compiler.patch']
+patches = ['HIPIFY-19.0.0_do-not-hardcode-compiler.patch']
 checksums = [
     # rocm-6.4.1.tar.gz
     'f22595edb0501bc29aa62263a65333748ebb5a50db80179f6c8e5141697a22ef',
-    # HIPIFY-19.0.0_no-not-hardcode-compiler.patch
+    # HIPIFY-19.0.0_do-not-hardcode-compiler.patch
     '409dde74002d7fdb2e243dd9dda1847660f78ac596103f05796afb6a98af5d04',
 ]
 
@@ -28,7 +27,6 @@ builddependencies = [
     ('CMake', '3.31.3'),
 ]
 dependencies = [
-    ('ROCm-LLVM', f'{_rocm_version}'),
     ('Perl', '5.40.0'),
     ('zlib', '1.3.1'),
 ]
