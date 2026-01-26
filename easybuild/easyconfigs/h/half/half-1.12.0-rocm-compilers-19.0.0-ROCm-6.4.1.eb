@@ -3,7 +3,6 @@ easyblock = 'CMakeMake'
 name = 'half'
 version = '1.5.0'
 _rocm_version = '6.4.1'
-versionsuffix = f'-ROCm-{_rocm_version}'
 
 homepage = 'https://github.com/ROCm/half'
 description = """This is a C++ header-only library to provide an IEEE 754 conformant 16-bit 
@@ -13,7 +12,7 @@ efficiency and ease of use, trying to accurately mimic the behaviour of the
 builtin floating point types at the best performance possible."""
 docurls = ['http://half.sourceforge.net']
 
-toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
+toolchain = {'name': 'rocm-compilers', 'version': '19.0.0-ROCm-6.4.1'}
 
 github_account = 'ROCm'
 source_urls = [GITHUB_SOURCE]
@@ -23,10 +22,7 @@ checksums = ['0215b6e6bd851ef4fb758dda9c5fb9c87e59fb79dec0640ba4ef9808c474e209']
 builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
-    ('rocm-cmake', '0.14.0', f'-ROCm-{_rocm_version}'),
-]
-dependencies = [
-    ('ROCm-LLVM', f'{_rocm_version}'),
+    ('rocm-cmake', '0.14.0'),
 ]
 
 sanity_check_paths = {
