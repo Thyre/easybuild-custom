@@ -10,7 +10,7 @@ data among multiple languages like JSON, except that it's faster and smaller.
 Small integers are encoded into a single byte while typical short strings
 require only one extra byte in addition to the strings themselves."""
 
-toolchain = {'name': 'GCC', 'version': '14.2.0'}
+toolchain = {'name': 'rocm-compilers', 'version': '19.0.0-ROCm-6.4.1'}
 
 source_urls = ['https://github.com/msgpack/msgpack-c/releases/download/cpp-%(version)s']
 sources = ['msgpack-cxx-%(version)s.tar.gz']
@@ -23,7 +23,7 @@ builddependencies = [
 ]
 
 dependencies = [
-    ('Boost', '1.88.0')
+    ('Boost', '1.88.0'),
 ]
 
 sanity_check_paths = {
