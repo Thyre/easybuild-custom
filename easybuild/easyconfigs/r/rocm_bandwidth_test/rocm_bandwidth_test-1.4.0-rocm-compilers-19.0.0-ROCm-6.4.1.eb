@@ -3,7 +3,6 @@ easyblock = 'CMakeMake'
 name = 'rocm_bandwidth_test'
 version = '1.4.0'
 _rocm_version = '6.4.1'
-versionsuffix = f'-ROCm-{_rocm_version}'
 
 homepage = 'https://github.com/ROCm/rocm_bandwidth_test'
 description = """ROCm Bandwidth Test is designed to capture the performance characteristics
@@ -12,7 +11,7 @@ options for initiating copy, read, and write operations. In addition to this, yo
 the system topology in terms of memory pools and their agents."""
 docurls = ['https://rocm.docs.amd.com/projects/rocm_bandwidth_test/en/latest/']
 
-toolchain = {'name': 'GCCcore', 'version': '14.2.0'}
+toolchain = {'name': 'rocm-compilers', 'version': '19.0.0-ROCm-6.4.1'}
 
 github_account = 'ROCm'
 source_urls = [GITHUB_SOURCE]
@@ -22,10 +21,6 @@ checksums = ['6910f52af9416802245d4fb6406274fd2bde6e9c287cc2d602adf682ecf98e4e']
 builddependencies = [
     ('binutils', '2.42'),
     ('CMake', '3.31.3'),
-]
-
-dependencies = [
-    ('ROCm-LLVM', f'{_rocm_version}'),
 ]
 
 sanity_check_paths = {
