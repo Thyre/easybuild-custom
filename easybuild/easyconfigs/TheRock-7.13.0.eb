@@ -1,0 +1,32 @@
+easyblock = 'Tarball'
+
+name = 'TheRock'
+version = '7.13.0'
+
+toolchain = SYSTEM
+
+homepage = 'https://github.com/ROCm/TheRock'
+description = '''
+TheRock (The HIP Environment and ROCm Kit) is a lightweight open source build
+platform for HIP and ROCm. It is designed for ROCm contributors as well as
+developers, researchers, and advanced users who need access to the latest ROCm
+capabilities without the complexity of traditional package-based installations.
+'''
+
+source_urls = ['https://repo.amd.com/rocm/tarball-multi-arch/']
+sources = ['therock-dist-linux-multiarch-%(version)s.tar.gz']
+checksums = ['ebd49add11bd18537c391e69dd2c12b435b6bf62ca5109988b40e98318926291']
+
+local_gccver = '15.2.0'
+dependencies = [
+    ('GCCcore', '15.2.0'),
+    ('binutils', '2.45', ('GCCcore', local_gccver)),
+]
+
+local_gcclibdir = f"$EBROOTGCCCORE/lib/gcc/x86_64-pc-linux-gnu/{local_gccver}"
+local_echostr = f'echo "--gcc-install-dir={local_gcclibdir} -L$EBROOTGCCCORE/lib"'
+postinstallcmds = []
+for _compiler in ['clang', 'clang++', 'flang']:
+    postinstallcmds += [f'{local_echostr} > %(installdir)s/llvm/bin/{_compiler}.cfg']
+
+moduleclass = 'compiler'
